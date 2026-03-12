@@ -96,6 +96,69 @@
     margin-bottom: 20px;
   }
 
+  .profile-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .profile-btn {
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    border: 3px solid rgba(255,255,255,0.2);
+    border-radius: 25px;
+    padding: 30px 25px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 170px;
+  }
+
+  .profile-btn:hover {
+    background: rgba(255,255,255,0.22);
+    transform: translateY(-5px) scale(1.03);
+    border-color: rgba(255,255,255,0.4);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+
+  .profile-btn:active { transform: translateY(-2px) scale(0.98); }
+
+  .profile-emoji { font-size: 70px; display: block; line-height: 1; }
+  .profile-name {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.4em;
+    color: white;
+  }
+  .profile-game {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.85em;
+    font-weight: 700;
+  }
+
+  .btn-switch-profile {
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 15px;
+    padding: 10px 20px;
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 10px;
+  }
+
+  .btn-switch-profile:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+  }
+
   .start-pounds {
     background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,180,0,0.1));
     backdrop-filter: blur(10px);
@@ -736,8 +799,8 @@
   .boss-bear-container {
     display: flex;
     justify-content: center;
-    margin: 20px 0 30px;
-    min-height: 200px;
+    margin: 10px 0 20px;
+    min-height: 180px;
     align-items: center;
     position: relative;
     overflow: hidden;
@@ -842,6 +905,72 @@
     60% { transform: scale(3) rotate(-20deg); opacity: 0.6; filter: brightness(0.5); }
     100% { transform: scale(0) rotate(360deg); opacity: 0; }
   }
+
+  /* ── Minecraft Skeleton Pixel Art ── */
+  .boss-skeleton {
+    width: 8px;
+    height: 8px;
+    background: transparent;
+    transform: scale(4);
+    transition: all 0.3s ease;
+    image-rendering: pixelated;
+    box-shadow:
+      /* Row 1 - top of skull */
+      16px 0px 0 #C8C8C8, 24px 0px 0 #C8C8C8, 32px 0px 0 #C8C8C8, 40px 0px 0 #C8C8C8,
+      48px 0px 0 #C8C8C8, 56px 0px 0 #C8C8C8, 64px 0px 0 #C8C8C8, 72px 0px 0 #C8C8C8,
+      /* Row 2 - skull upper */
+      8px 8px 0 #C8C8C8, 16px 8px 0 #DCDCDC, 24px 8px 0 #DCDCDC, 32px 8px 0 #DCDCDC,
+      40px 8px 0 #DCDCDC, 48px 8px 0 #DCDCDC, 56px 8px 0 #DCDCDC, 64px 8px 0 #DCDCDC,
+      72px 8px 0 #DCDCDC, 80px 8px 0 #C8C8C8,
+      /* Row 3 - eyes */
+      8px 16px 0 #DCDCDC, 16px 16px 0 #DCDCDC, 24px 16px 0 #1a1a1a, 32px 16px 0 #1a1a1a,
+      40px 16px 0 #DCDCDC, 48px 16px 0 #DCDCDC, 56px 16px 0 #1a1a1a, 64px 16px 0 #1a1a1a,
+      72px 16px 0 #DCDCDC, 80px 16px 0 #DCDCDC,
+      /* Row 4 - nose area */
+      8px 24px 0 #DCDCDC, 16px 24px 0 #DCDCDC, 24px 24px 0 #DCDCDC, 32px 24px 0 #DCDCDC,
+      40px 24px 0 #999, 48px 24px 0 #999, 56px 24px 0 #DCDCDC, 64px 24px 0 #DCDCDC,
+      72px 24px 0 #DCDCDC, 80px 24px 0 #DCDCDC,
+      /* Row 5 - mouth/teeth */
+      8px 32px 0 #C8C8C8, 16px 32px 0 #DCDCDC, 24px 32px 0 #333, 32px 32px 0 #DCDCDC,
+      40px 32px 0 #333, 48px 32px 0 #DCDCDC, 56px 32px 0 #333, 64px 32px 0 #DCDCDC,
+      72px 32px 0 #333, 80px 32px 0 #C8C8C8,
+      /* Row 6 - jaw */
+      16px 40px 0 #C8C8C8, 24px 40px 0 #C8C8C8, 32px 40px 0 #C8C8C8, 40px 40px 0 #C8C8C8,
+      48px 40px 0 #C8C8C8, 56px 40px 0 #C8C8C8, 64px 40px 0 #C8C8C8, 72px 40px 0 #C8C8C8,
+      /* Row 7 - neck/spine */
+      32px 48px 0 #999, 40px 48px 0 #C8C8C8, 48px 48px 0 #C8C8C8, 56px 48px 0 #999,
+      /* Row 8 - shoulders */
+      0px 56px 0 #999, 8px 56px 0 #C8C8C8, 16px 56px 0 #C8C8C8, 24px 56px 0 #C8C8C8,
+      32px 56px 0 #DCDCDC, 40px 56px 0 #DCDCDC, 48px 56px 0 #DCDCDC, 56px 56px 0 #DCDCDC,
+      64px 56px 0 #C8C8C8, 72px 56px 0 #C8C8C8, 80px 56px 0 #C8C8C8, 88px 56px 0 #999,
+      /* Row 9 - ribcage top */
+      0px 64px 0 #999, 8px 64px 0 #C8C8C8,
+      32px 64px 0 #C8C8C8, 40px 64px 0 #DCDCDC, 48px 64px 0 #DCDCDC, 56px 64px 0 #C8C8C8,
+      80px 64px 0 #C8C8C8, 88px 64px 0 #999,
+      /* Row 10 - ribs middle */
+      0px 72px 0 #999, 8px 72px 0 #C8C8C8,
+      24px 72px 0 #C8C8C8, 32px 72px 0 #DCDCDC, 40px 72px 0 #DCDCDC,
+      48px 72px 0 #DCDCDC, 56px 72px 0 #DCDCDC, 64px 72px 0 #C8C8C8,
+      80px 72px 0 #C8C8C8, 88px 72px 0 #999,
+      /* Row 11 - ribs lower */
+      0px 80px 0 #999, 8px 80px 0 #C8C8C8,
+      32px 80px 0 #C8C8C8, 40px 80px 0 #DCDCDC, 48px 80px 0 #DCDCDC, 56px 80px 0 #C8C8C8,
+      80px 80px 0 #C8C8C8, 88px 80px 0 #999,
+      /* Row 12 - pelvis */
+      16px 88px 0 #999, 24px 88px 0 #C8C8C8, 32px 88px 0 #C8C8C8, 40px 88px 0 #DCDCDC,
+      48px 88px 0 #DCDCDC, 56px 88px 0 #C8C8C8, 64px 88px 0 #C8C8C8, 72px 88px 0 #999,
+      /* Row 13 - legs upper */
+      24px 96px 0 #999, 32px 96px 0 #C8C8C8,
+      56px 96px 0 #C8C8C8, 64px 96px 0 #999,
+      /* Row 14 - legs lower */
+      24px 104px 0 #999, 32px 104px 0 #C8C8C8,
+      56px 104px 0 #C8C8C8, 64px 104px 0 #999;
+  }
+
+  .boss-skeleton.idle { animation: bossBreath 2s infinite ease-in-out; }
+  .boss-skeleton.hit { animation: bossHitAnim 0.5s ease; }
+  .boss-skeleton.attack { animation: bossAttackAnim 0.6s ease; }
+  .boss-skeleton.defeated { animation: bossDefeatAnim 1.5s ease forwards; }
 
   .boss-hp-container, .player-hp-container {
     display: flex;
@@ -1146,13 +1275,15 @@
 
     /* Boss mobile */
     .boss-arena { padding: 15px 12px; }
-    .boss-bear { transform: scale(2.5) !important; }
-    .boss-bear.idle { animation: bossBreathe_mobile 2s infinite ease-in-out; }
+    .boss-bear, .boss-skeleton { transform: scale(2.5) !important; }
+    .boss-bear.idle, .boss-skeleton.idle { animation: bossBreathe_mobile 2s infinite ease-in-out; }
     @keyframes bossBreathe_mobile {
       0%, 100% { transform: scale(2.5) translateY(0); }
       50% { transform: scale(2.6) translateY(-2px); }
     }
     .boss-bear-container { min-height: 100px; }
+    .profile-emoji { font-size: 50px; }
+    .profile-btn { min-width: 140px; padding: 20px 15px 15px; }
     .boss-math-equation { font-size: 2em; }
     .boss-option-btn { font-size: 1.1em; padding: 10px; }
     .player-hearts { font-size: 1.4em; }
@@ -1168,13 +1299,33 @@
 <!-- ═══════════════════ START SCREEN ═══════════════════ -->
 <div class="game-container" id="startScreen">
   <div class="start-screen">
-    <span class="start-mascot">🐨</span>
-    <div class="start-title">Koali's Adventure</div>
-    <div class="start-subtitle">Spell & Math Time!</div>
-    <div class="start-pounds" id="startPounds">🪙 0 Koali Pounds</div>
-    <br>
-    <button class="btn-start" onclick="startGame()">🎮 Play!</button>
-    <button class="btn-settings-start" onclick="openSettings()">⚙️ Settings</button>
+    <!-- Profile Picker -->
+    <div id="profilePicker">
+      <div class="start-title" style="margin-bottom: 25px;">Who's Playing?</div>
+      <div class="profile-buttons">
+        <button class="profile-btn" onclick="selectProfile('christopher')">
+          <span class="profile-emoji">🐨</span>
+          <span class="profile-name">Christopher</span>
+          <span class="profile-game">Koali's Adventure</span>
+        </button>
+        <button class="profile-btn" onclick="selectProfile('maya')">
+          <span class="profile-emoji">🐻</span>
+          <span class="profile-name">Maya</span>
+          <span class="profile-game">Big Bear's Adventure</span>
+        </button>
+      </div>
+    </div>
+    <!-- Start Content (shown after profile selected) -->
+    <div id="profileStartContent" style="display: none;">
+      <span class="start-mascot" id="startMascot">🐨</span>
+      <div class="start-title" id="startTitle">Koali's Adventure</div>
+      <div class="start-subtitle" id="startSubtitle">Spell & Math Time!</div>
+      <div class="start-pounds" id="startPounds">🪙 0 Koali Pounds</div>
+      <br>
+      <button class="btn-start" onclick="startGame()">🎮 Play!</button>
+      <button class="btn-settings-start" onclick="openSettings()">⚙️ Settings</button>
+      <button class="btn-switch-profile" onclick="switchProfile()">👤 Switch Player</button>
+    </div>
   </div>
 </div>
 
@@ -1240,14 +1391,14 @@
       <div class="boss-intro-text" id="bossIntroText">⚔️ BOSS BATTLE! ⚔️</div>
 
       <div class="boss-hp-container">
-        <div class="hp-label" style="color: #ff6b6b;">BEAR</div>
+        <div class="hp-label" id="bossHpLabel" style="color: #ff6b6b;">BEAR</div>
         <div class="hp-bar-outer boss-hp">
           <div class="hp-bar-inner" id="bossHpBar" style="width: 100%;"></div>
         </div>
       </div>
 
       <div class="boss-bear-container">
-        <div class="boss-bear idle" id="bossBear"></div>
+        <div class="boss-bear idle" id="bossCharacter"></div>
       </div>
 
       <div class="player-hp-container">
@@ -1335,49 +1486,128 @@ const DEFAULT_WORDS = [
 
 const DEFAULT_TABLES = [4, 9];
 
+const MAYA_DEFAULT_WORDS = [
+  { word: "illegal", emoji: "🚫", hint: "Against the law" },
+  { word: "illegible", emoji: "📝", hint: "Writing that is hard to read" },
+  { word: "illogical", emoji: "🤔", hint: "Not making sense" },
+  { word: "illicit", emoji: "⛔", hint: "Not allowed or approved" },
+  { word: "illiterate", emoji: "📖", hint: "Unable to read or write" },
+  { word: "irregular", emoji: "〰️", hint: "Not even or following a pattern" },
+  { word: "irrelevant", emoji: "🤷", hint: "Not related to the topic" },
+  { word: "irresponsible", emoji: "😬", hint: "Not acting with care or thought" },
+  { word: "irrational", emoji: "🌀", hint: "Not reasonable or logical" },
+  { word: "irresistible", emoji: "🧲", hint: "Too tempting to refuse" },
+  { word: "what", emoji: "❓", hint: "Asking about something" },
+  { word: "hour", emoji: "🕐", hint: "60 minutes" },
+  { word: "find", emoji: "🔍", hint: "To look for and discover" },
+  { word: "holiday", emoji: "🏖️", hint: "A day off or vacation" },
+  { word: "your", emoji: "👉", hint: "Belonging to you" }
+];
+
+// ═══════════════════ PROFILES ═══════════════════
+var PROFILES = {
+  christopher: {
+    id: 'christopher',
+    name: 'Christopher',
+    gameName: "Koali's Adventure",
+    subtitle: 'Spell & Math Time!',
+    mascot: '🐨',
+    mascotName: 'Koali',
+    heroEmoji: '🐨🌿',
+    bodyGradient: 'linear-gradient(135deg, #0f4c3a 0%, #1a7a5a 30%, #43cea2 60%, #185a9d 100%)',
+    bossGradient: 'linear-gradient(135deg, #1a0a0a 0%, #3d1111 30%, #5a1a1a 60%, #2a0505 100%)',
+    bossName: 'BEAR',
+    bossClass: 'boss-bear',
+    bossAttackMsg: '🔥 Bear attacks!',
+    bossDefeatMsg: '🎉 YOU DEFEATED THE BEAR!',
+    bossLoseMsg: '💔 The bear wins this time...',
+    currencyName: 'Koali Pounds',
+    currencySingular: 'Koali Pound',
+    defaultWords: DEFAULT_WORDS,
+    defaultTables: [4, 9],
+    victoryBossMsg: 'You spelled the words, did the math, AND defeated the bear! Koali is SO proud!',
+    victoryNoBossMsg: 'You completed all the challenges! Koali is proud!',
+    storagePrefix: 'koali',
+    leafEmojis: ['🍃', '🌿', '🍂', '🌱'],
+    mathRounds: null
+  },
+  maya: {
+    id: 'maya',
+    name: 'Maya',
+    gameName: "Big Bear's Adventure",
+    subtitle: 'Spell & Math Time!',
+    mascot: '🐻',
+    mascotName: 'Big Bear',
+    heroEmoji: '🐻⭐',
+    bodyGradient: 'linear-gradient(135deg, #4a2c17 0%, #8B5E3C 30%, #D4956A 60%, #C4722A 100%)',
+    bossGradient: 'linear-gradient(135deg, #0a0a1a 0%, #111133 30%, #1a1a4a 60%, #050520 100%)',
+    bossName: 'SKELETON',
+    bossClass: 'boss-skeleton',
+    bossAttackMsg: '💀 Skeleton attacks!',
+    bossDefeatMsg: '🎉 YOU DEFEATED THE SKELETON!',
+    bossLoseMsg: '💀 The skeleton wins this time...',
+    currencyName: 'Bear Coins',
+    currencySingular: 'Bear Coin',
+    defaultWords: MAYA_DEFAULT_WORDS,
+    defaultTables: [2,3,4,5,6,7,8,9,10,11,12],
+    victoryBossMsg: "You spelled the words, did the math, AND defeated the skeleton! Big Bear is SO proud!",
+    victoryNoBossMsg: "You completed all the challenges! Big Bear is proud!",
+    storagePrefix: 'bear',
+    leafEmojis: ['⭐', '🌟', '✨', '🐝'],
+    mathRounds: 5
+  }
+};
+
+var currentProfile = null;
+
 // ═══════════════════ localStorage HELPERS ═══════════════════
+function storageKey(suffix) {
+  return currentProfile.storagePrefix + '_' + suffix;
+}
+
 function loadWords() {
   try {
-    const stored = localStorage.getItem('koali_customWords');
+    var stored = localStorage.getItem(storageKey('customWords'));
     if (stored) {
-      const parsed = JSON.parse(stored);
+      var parsed = JSON.parse(stored);
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     }
   } catch(e) {}
-  return DEFAULT_WORDS.map(function(w) { return {word: w.word, emoji: w.emoji, hint: w.hint}; });
+  return currentProfile.defaultWords.map(function(w) { return {word: w.word, emoji: w.emoji, hint: w.hint}; });
 }
 
 function saveWords(words) {
-  localStorage.setItem('koali_customWords', JSON.stringify(words));
+  localStorage.setItem(storageKey('customWords'), JSON.stringify(words));
 }
 
 function loadTimesTables() {
   try {
-    const stored = localStorage.getItem('koali_timesTables');
+    var stored = localStorage.getItem(storageKey('timesTables'));
     if (stored) {
-      const parsed = JSON.parse(stored);
+      var parsed = JSON.parse(stored);
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     }
   } catch(e) {}
-  return DEFAULT_TABLES.slice();
+  return currentProfile.defaultTables.slice();
 }
 
 function saveTimesTables(tables) {
-  localStorage.setItem('koali_timesTables', JSON.stringify(tables));
+  localStorage.setItem(storageKey('timesTables'), JSON.stringify(tables));
 }
 
 function loadTotalPounds() {
-  return parseInt(localStorage.getItem('koali_totalPounds') || '0', 10);
+  return parseInt(localStorage.getItem(storageKey('totalPounds')) || '0', 10);
 }
 
 function saveTotalPounds(total) {
-  localStorage.setItem('koali_totalPounds', total.toString());
+  localStorage.setItem(storageKey('totalPounds'), total.toString());
 }
 
 // ═══════════════════ GAME STATE ═══════════════════
-var activeWords = loadWords();
-var activeTimesTables = loadTimesTables();
-var TOTAL_ROUNDS = activeWords.length * 2;
+var activeWords = [];
+var activeTimesTables = [];
+var TOTAL_ROUNDS = 0;
+var roundSchedule = [];
 
 var gamePhase = 'start'; // 'start' | 'playing' | 'boss' | 'victory'
 var currentRoundCount = 0;
@@ -1413,19 +1643,109 @@ var AudioContextClass = window.AudioContext || window.webkitAudioContext;
 var audioCtx = new AudioContextClass();
 
 function init() {
-  createLeaves();
+  var lastProfile = localStorage.getItem('lastProfile');
+  if (lastProfile && PROFILES[lastProfile]) {
+    selectProfile(lastProfile);
+  } else {
+    createLeaves();
+  }
+}
+
+function selectProfile(profileId) {
+  currentProfile = PROFILES[profileId];
+  localStorage.setItem('lastProfile', profileId);
+  applyTheme();
+  document.getElementById('profilePicker').style.display = 'none';
+  document.getElementById('profileStartContent').style.display = 'block';
   updateStartScreen();
+  playSound('pop');
+}
+
+function switchProfile() {
+  currentProfile = null;
+  document.getElementById('profilePicker').style.display = 'block';
+  document.getElementById('profileStartContent').style.display = 'none';
+  // Reset to a neutral background
+  document.body.style.background = 'linear-gradient(135deg, #0f4c3a 0%, #1a7a5a 30%, #43cea2 60%, #185a9d 100%)';
+  playSound('pop');
+}
+
+function applyTheme() {
+  var p = currentProfile;
+  // Page title
+  document.title = p.mascot + ' ' + p.gameName;
+  // Body background
+  document.body.style.background = p.bodyGradient;
+  // Start screen
+  document.getElementById('startMascot').textContent = p.mascot;
+  document.getElementById('startTitle').textContent = p.gameName;
+  // Game header
+  document.getElementById('mascot').textContent = p.mascot;
+  var headerH1 = document.querySelector('.header h1');
+  if (headerH1) headerH1.textContent = p.gameName;
+  var headerP = document.querySelector('.header p');
+  if (headerP) headerP.textContent = p.subtitle;
+  // Victory overlay
+  var hugEl = document.querySelector('.koala-hug');
+  if (hugEl) hugEl.textContent = p.heroEmoji;
+  var poundsTitle = document.querySelector('.pounds-title');
+  if (poundsTitle) poundsTitle.textContent = p.currencyName + ' Earned:';
+  // Boss arena
+  var bossLabel = document.getElementById('bossHpLabel');
+  if (bossLabel) bossLabel.textContent = p.bossName;
+  var bossEl = document.getElementById('bossCharacter');
+  if (bossEl) bossEl.className = p.bossClass + ' idle';
+  // Recreate leaves
+  var leavesContainer = document.getElementById('leaves');
+  leavesContainer.textContent = '';
+  createLeaves();
 }
 
 function updateStartScreen() {
+  if (!currentProfile) return;
   var total = loadTotalPounds();
-  document.getElementById('startPounds').textContent = '\uD83E\uDE99 ' + total + ' Koali Pound' + (total !== 1 ? 's' : '');
+  var label = total !== 1 ? currentProfile.currencyName : currentProfile.currencySingular;
+  document.getElementById('startPounds').textContent = '🪙 ' + total + ' ' + label;
 }
 
 function startGame() {
   activeWords = loadWords();
   activeTimesTables = loadTimesTables();
-  TOTAL_ROUNDS = activeWords.length * 2;
+  var numMath = currentProfile.mathRounds !== null ? currentProfile.mathRounds : activeWords.length;
+  var numSpelling = activeWords.length;
+  TOTAL_ROUNDS = numSpelling + numMath;
+
+  // Build round schedule: interleave spelling and math evenly
+  roundSchedule = [];
+  if (numMath === numSpelling) {
+    // Equal: alternate spelling, math, spelling, math...
+    for (var i = 0; i < numSpelling; i++) {
+      roundSchedule.push('spelling', 'math');
+    }
+  } else {
+    // Fewer math: spread math rounds evenly among spelling rounds
+    var mathInterval = numMath > 0 ? Math.floor(TOTAL_ROUNDS / numMath) : TOTAL_ROUNDS + 1;
+    var mathPlaced = 0;
+    for (var i = 0; i < TOTAL_ROUNDS; i++) {
+      if (mathPlaced < numMath && i > 0 && i % mathInterval === mathInterval - 1) {
+        roundSchedule.push('math');
+        mathPlaced++;
+      } else {
+        roundSchedule.push('spelling');
+      }
+    }
+    // If we haven't placed all math rounds, append them
+    while (mathPlaced < numMath) {
+      // Find a spelling slot from the end and replace
+      for (var j = roundSchedule.length - 1; j >= 0; j--) {
+        if (roundSchedule[j] === 'spelling' && mathPlaced < numMath) {
+          roundSchedule[j] = 'math';
+          mathPlaced++;
+          break;
+        }
+      }
+    }
+  }
 
   gamePhase = 'playing';
   currentRoundCount = 0;
@@ -1447,6 +1767,7 @@ function startGame() {
   document.getElementById('mathCard').style.display = 'none';
 
   document.body.classList.remove('boss-mode');
+  document.body.style.background = currentProfile.bodyGradient;
   playSound('pop');
   loadChallenge();
 }
@@ -1456,6 +1777,7 @@ function goToStartScreen() {
   document.getElementById('gameScreen').style.display = 'none';
   document.getElementById('startScreen').style.display = 'flex';
   document.body.classList.remove('boss-mode');
+  document.body.style.background = currentProfile.bodyGradient;
   gamePhase = 'start';
   updateStartScreen();
 }
@@ -1463,7 +1785,7 @@ function goToStartScreen() {
 // ═══════════════════ LEAVES ═══════════════════
 function createLeaves() {
   var container = document.getElementById('leaves');
-  var leafTypes = ['\uD83C\uDF43', '\uD83C\uDF3F', '\uD83C\uDF42', '\uD83C\uDF31'];
+  var leafTypes = currentProfile ? currentProfile.leafEmojis : ['🍃', '🌿', '🍂', '🌱'];
   for (var i = 0; i < 20; i++) {
     var leaf = document.createElement('div');
     leaf.className = 'leaf';
@@ -1496,7 +1818,7 @@ function loadChallenge() {
   var btnCheck = document.getElementById('btnCheck');
   if (btnCheck) btnCheck.classList.remove('pulse');
 
-  if (currentRoundCount % 2 === 0) {
+  if (roundSchedule[currentRoundCount] === 'spelling') {
     document.getElementById('spellingCard').style.display = 'flex';
     document.getElementById('mathCard').style.display = 'none';
     loadSpellingRound();
@@ -1945,6 +2267,7 @@ function startBossBattle() {
   bossHeartsLost = 0;
 
   document.body.classList.add('boss-mode');
+  document.body.style.background = currentProfile.bossGradient;
   document.getElementById('spellingCard').style.display = 'none';
   document.getElementById('mathCard').style.display = 'none';
   document.getElementById('bossCard').classList.add('show');
@@ -1967,9 +2290,9 @@ function startBossBattle() {
     heartsEl.appendChild(span);
   }
 
-  // Boss bear animation
-  var bear = document.getElementById('bossBear');
-  bear.className = 'boss-bear';
+  // Boss character animation
+  var bear = document.getElementById('bossCharacter');
+  bear.className = currentProfile.bossClass;
   bear.offsetHeight;
   bear.classList.add('idle');
 
@@ -2136,7 +2459,7 @@ function handleBossAnswer(isCorrect, btnElement) {
     document.getElementById('bossHpBar').style.width = Math.max(0, bossHp) + '%';
 
     // Bear hit animation
-    var bear = document.getElementById('bossBear');
+    var bear = document.getElementById('bossCharacter');
     bear.classList.remove('idle', 'hit');
     bear.offsetHeight;
     bear.classList.add('hit');
@@ -2164,7 +2487,7 @@ function handleBossAnswer(isCorrect, btnElement) {
     }
 
     // Bear attack animation
-    var bear2 = document.getElementById('bossBear');
+    var bear2 = document.getElementById('bossCharacter');
     bear2.classList.remove('idle', 'attack');
     bear2.offsetHeight;
     bear2.classList.add('attack');
@@ -2183,7 +2506,7 @@ function handleBossAnswer(isCorrect, btnElement) {
       setTimeout(function() { heartToLose.classList.add('lost'); }, 500);
     }
 
-    document.getElementById('bossFeedback').textContent = '\uD83D\uDD25 Bear attacks!';
+    document.getElementById('bossFeedback').textContent = currentProfile.bossAttackMsg;
     document.getElementById('bossFeedback').className = 'feedback incorrect';
     playSound('bossAttack');
 
@@ -2198,13 +2521,13 @@ function handleBossAnswer(isCorrect, btnElement) {
 }
 
 function bossDefeated() {
-  var bear = document.getElementById('bossBear');
+  var bear = document.getElementById('bossCharacter');
   bear.classList.remove('idle', 'hit');
   bear.classList.add('defeated');
   playSound('bossDefeat');
   createSparkles(document.getElementById('bossArena'));
 
-  document.getElementById('bossFeedback').textContent = '\uD83C\uDF89 YOU DEFEATED THE BEAR!';
+  document.getElementById('bossFeedback').textContent = currentProfile.bossDefeatMsg;
   document.getElementById('bossFeedback').className = 'feedback correct';
   document.getElementById('bossFeedback').style.fontSize = '1.4em';
 
@@ -2215,7 +2538,7 @@ function bossDefeated() {
 }
 
 function bossPlayerLost() {
-  document.getElementById('bossFeedback').textContent = '\uD83D\uDC94 The bear wins this time...';
+  document.getElementById('bossFeedback').textContent = currentProfile.bossLoseMsg;
   document.getElementById('bossFeedback').className = 'feedback incorrect';
 
   var qArea = document.getElementById('bossQuestionArea');
@@ -2265,6 +2588,7 @@ function calculateKoaliPounds(bossBeaten) {
 function showVictory(bossBeaten) {
   gamePhase = 'victory';
   document.body.classList.remove('boss-mode');
+  document.body.style.background = currentProfile.bodyGradient;
   document.getElementById('bossCard').classList.remove('show');
 
   var earnedPounds = calculateKoaliPounds(bossBeaten);
@@ -2276,10 +2600,10 @@ function showVictory(bossBeaten) {
 
   if (bossBeaten) {
     document.getElementById('victoryTitle').textContent = 'AMAZING!';
-    document.getElementById('victoryMessage').textContent = 'You spelled the words, did the math, AND defeated the bear! Koali is SO proud!';
+    document.getElementById('victoryMessage').textContent = currentProfile.victoryBossMsg;
   } else {
     document.getElementById('victoryTitle').textContent = 'WELL DONE!';
-    document.getElementById('victoryMessage').textContent = 'You completed all the challenges! Koali is proud!';
+    document.getElementById('victoryMessage').textContent = currentProfile.victoryNoBossMsg;
   }
 
   // Render pound coins
@@ -2301,7 +2625,7 @@ function showVictory(bossBeaten) {
     })(coin, i, earnedPounds);
   }
 
-  document.getElementById('poundsTotal').textContent = 'Lifetime Total: ' + newTotal + ' \uD83E\uDE99';
+  document.getElementById('poundsTotal').textContent = 'Lifetime Total: ' + newTotal + ' ' + currentProfile.currencyName + ' 🪙';
 
   document.getElementById('victoryOverlay').classList.add('show');
   createConfetti();
@@ -2388,7 +2712,8 @@ function closeSettings() {
   saveTimesTables(activeTables);
   activeTimesTables = activeTables;
 
-  TOTAL_ROUNDS = activeWords.length * 2;
+  var numMath = currentProfile.mathRounds !== null ? currentProfile.mathRounds : activeWords.length;
+  TOTAL_ROUNDS = activeWords.length + numMath;
   document.getElementById('settingsOverlay').classList.remove('show');
   playSound('correct');
 }
@@ -2446,7 +2771,7 @@ function addWordRow() {
 }
 
 function resetWordsToDefault() {
-  localStorage.removeItem('koali_customWords');
+  localStorage.removeItem(storageKey('customWords'));
   renderWordEditor();
   playSound('pop');
 }
