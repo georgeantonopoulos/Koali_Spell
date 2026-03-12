@@ -15,11 +15,15 @@
 
   body {
     font-family: 'Nunito', sans-serif;
-    background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+    background: linear-gradient(135deg, #0f4c3a 0%, #1a7a5a 30%, #43cea2 60%, #185a9d 100%);
     min-height: 100vh;
     overflow-x: hidden;
-    /* Prevent pull-to-refresh on mobile */
-    overscroll-behavior-y: contain; 
+    overscroll-behavior-y: contain;
+    transition: background 1s ease;
+  }
+
+  body.boss-mode {
+    background: linear-gradient(135deg, #1a0a0a 0%, #3d1111 30%, #5a1a1a 60%, #2a0505 100%);
   }
 
   .leaves {
@@ -28,7 +32,10 @@
     width: 100%; height: 100%;
     pointer-events: none;
     z-index: 0;
+    transition: opacity 1s ease;
   }
+
+  body.boss-mode .leaves { opacity: 0.15; }
 
   .leaf {
     position: absolute;
@@ -55,6 +62,96 @@
     justify-content: center;
   }
 
+  /* ═══════════════════ START SCREEN ═══════════════════ */
+  .start-screen {
+    text-align: center;
+    animation: fadeIn 0.8s ease;
+  }
+
+  .start-mascot {
+    font-size: 120px;
+    display: block;
+    animation: koalaBounce 2s infinite ease-in-out;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+  }
+
+  @keyframes koalaBounce {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-15px) rotate(3deg); }
+  }
+
+  .start-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3em;
+    color: #fff;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.2), 0 0 30px rgba(56,239,125,0.3);
+    margin-bottom: 5px;
+  }
+
+  .start-subtitle {
+    color: #b8f0d8;
+    font-size: 1.3em;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .start-pounds {
+    background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,180,0,0.1));
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,215,0,0.3);
+    border-radius: 20px;
+    padding: 12px 25px;
+    display: inline-block;
+    color: #ffd700;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.3em;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px rgba(255,215,0,0.3);
+  }
+
+  .btn-start {
+    background: linear-gradient(135deg, #8e44ad, #9b59b6, #8e44ad);
+    background-size: 200% 100%;
+    animation: shimmerBtn 3s infinite linear;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.8em;
+    color: white;
+    border: none;
+    padding: 18px 60px;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 8px 0 #6c3483, 0 12px 30px rgba(0,0,0,0.3);
+    transition: all 0.2s ease;
+    display: block;
+    margin: 0 auto 15px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+  }
+
+  .btn-start:hover { transform: translateY(-3px); box-shadow: 0 11px 0 #6c3483, 0 15px 35px rgba(0,0,0,0.3); }
+  .btn-start:active { transform: translateY(4px); box-shadow: 0 4px 0 #6c3483; }
+
+  @keyframes shimmerBtn {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .btn-settings-start {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(5px);
+    border: 2px solid rgba(255,255,255,0.2);
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.1em;
+    padding: 12px 30px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-settings-start:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); }
+
+  /* ═══════════════════ HEADER ═══════════════════ */
   .header {
     text-align: center;
     margin-bottom: 15px;
@@ -103,18 +200,43 @@
     100% { transform: scale(1) translateY(0) rotate(0); }
   }
 
+  .settings-gear {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 28px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(5px);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255,255,255,0.2);
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
+
+  .settings-gear:hover { background: rgba(255,255,255,0.25); transform: rotate(90deg); }
+
+  /* ═══════════════════ PROGRESS & SCORE ═══════════════════ */
   .progress-bar-container {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.25);
     border-radius: 25px;
-    padding: 5px;
+    padding: 4px;
     margin: 10px 0;
     position: relative;
+    overflow: hidden;
   }
 
   .progress-bar {
-    height: 25px;
-    background: linear-gradient(90deg, #11998e, #38ef7d);
-    border-radius: 20px;
+    height: 26px;
+    background: linear-gradient(90deg, #11998e, #38ef7d, #11998e);
+    background-size: 200% 100%;
+    animation: progressShimmer 2s infinite linear;
+    border-radius: 22px;
     transition: width 0.5s ease;
     display: flex;
     align-items: center;
@@ -123,43 +245,63 @@
     font-weight: 800;
     font-size: 0.85em;
     min-width: 40px;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  }
+
+  @keyframes progressShimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
   }
 
   .score-board {
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 12px;
     margin: 5px 0 15px;
     flex-wrap: wrap;
   }
 
   .score-item {
-    background: rgba(255,255,255,0.2);
-    backdrop-filter: blur(5px);
-    padding: 6px 15px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    padding: 6px 16px;
     border-radius: 20px;
     color: white;
     font-weight: 700;
     font-size: 1em;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    transition: all 0.3s ease;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
   }
 
+  .score-item:hover { background: rgba(255,255,255,0.22); transform: translateY(-1px); }
+
+  /* ═══════════════════ GAME CARDS ═══════════════════ */
   .game-card {
-    background: white;
-    border-radius: 30px;
+    background: linear-gradient(135deg, #ffffff, #f8fffe);
+    border-radius: 25px;
     padding: 25px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-    border: 4px solid #fff;
-    animation: slideIn 0.5s ease;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.5), inset 0 1px 0 rgba(255,255,255,0.8);
+    animation: cardIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
   }
 
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  .game-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #11998e, #38ef7d, #1abc9c);
+    border-radius: 25px 25px 0 0;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(30px) scale(0.95); }
     to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
@@ -169,17 +311,17 @@
   }
 
   .word-image {
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
     margin: 0 auto;
-    background: linear-gradient(135deg, #e8f3f1, #dbece9);
+    background: linear-gradient(135deg, #e8f8f5, #d1f2eb);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 60px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    border: 4px solid #a8e6cf;
+    font-size: 55px;
+    box-shadow: 0 8px 25px rgba(17,153,142,0.2), inset 0 -3px 6px rgba(0,0,0,0.05);
+    border: 3px solid #a8e6cf;
     position: relative;
     overflow: hidden;
   }
@@ -203,7 +345,7 @@
   .letter-slot {
     width: 50px;
     height: 55px;
-    border: 3px dashed #bdc3c7;
+    border: 3px dashed #ccd1d1;
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -270,8 +412,9 @@
     margin: 10px 0;
     min-height: 60px;
     padding: 15px;
-    background: rgba(46, 204, 113, 0.1);
+    background: rgba(46, 204, 113, 0.08);
     border-radius: 15px;
+    border: 2px dashed rgba(46,204,113,0.2);
   }
 
   .draggable-letter {
@@ -288,14 +431,14 @@
     cursor: grab;
     user-select: none;
     transition: all 0.2s ease;
-    box-shadow: 0 3px 0 #117a65;
+    box-shadow: 0 4px 0 #117a65, 0 6px 15px rgba(0,0,0,0.1);
     position: relative;
-    touch-action: none; /* Crucial for reliable touch dragging */
+    touch-action: none;
   }
 
-  .draggable-letter:hover { transform: translateY(-2px); }
-  .draggable-letter:active { cursor: grabbing; transform: translateY(2px); box-shadow: 0 0 0 #117a65; }
-  .draggable-letter.used { opacity: 0.3; pointer-events: none; transform: scale(0.9); box-shadow: none; background: #bdc3c7; }
+  .draggable-letter:hover { transform: translateY(-3px); box-shadow: 0 7px 0 #117a65, 0 9px 20px rgba(0,0,0,0.12); }
+  .draggable-letter:active { cursor: grabbing; transform: translateY(2px); box-shadow: 0 1px 0 #117a65; }
+  .draggable-letter.used { opacity: 0.25; pointer-events: none; transform: scale(0.85); box-shadow: none; background: #bdc3c7; }
   .dragging { opacity: 0.6; transform: scale(1.2) rotate(5deg); }
 
   .btn-container {
@@ -321,15 +464,23 @@
     text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
   }
 
-  .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
   .btn:active { transform: translateY(1px); }
 
-  .btn-check { background: linear-gradient(135deg, #27ae60, #2ecc71); }
-  .btn-skip { background: linear-gradient(135deg, #f39c12, #f1c40f); }
-  .btn-clear { background: linear-gradient(135deg, #c0392b, #e74c3c); }
-  .btn-hint { background: linear-gradient(135deg, #2980b9, #3498db); }
-  
-  .btn-play { background: linear-gradient(135deg, #8e44ad, #9b59b6); font-size: 1.3em; padding: 12px 30px; margin-top: 15px; }
+  .btn-check { background: linear-gradient(135deg, #27ae60, #2ecc71); box-shadow: 0 4px 0 #1e8449; }
+  .btn-check:active { box-shadow: 0 1px 0 #1e8449; }
+  .btn-check.pulse { animation: pulseGlow 1.5s infinite; }
+  @keyframes pulseGlow { 0%,100% { box-shadow: 0 4px 0 #1e8449, 0 0 0 0 rgba(46,204,113,0.4); } 50% { box-shadow: 0 4px 0 #1e8449, 0 0 0 12px rgba(46,204,113,0); } }
+
+  .btn-skip { background: linear-gradient(135deg, #f39c12, #f1c40f); box-shadow: 0 4px 0 #d68910; }
+  .btn-skip:active { box-shadow: 0 1px 0 #d68910; }
+  .btn-clear { background: linear-gradient(135deg, #c0392b, #e74c3c); box-shadow: 0 4px 0 #922b21; }
+  .btn-clear:active { box-shadow: 0 1px 0 #922b21; }
+  .btn-hint { background: linear-gradient(135deg, #2980b9, #3498db); box-shadow: 0 4px 0 #1f618d; }
+  .btn-hint:active { box-shadow: 0 1px 0 #1f618d; }
+
+  .btn-play { background: linear-gradient(135deg, #8e44ad, #9b59b6); font-size: 1.3em; padding: 12px 30px; margin-top: 15px; box-shadow: 0 5px 0 #6c3483; }
+  .btn-play:active { box-shadow: 0 1px 0 #6c3483; transform: translateY(4px); }
 
   .feedback {
     text-align: center;
@@ -343,7 +494,7 @@
   .feedback.correct { color: #27ae60; }
   .feedback.incorrect { color: #c0392b; }
 
-  /* Math Section Styles */
+  /* ═══════════════════ MATH SECTION ═══════════════════ */
   .math-equation {
     font-family: 'Fredoka One', cursive;
     font-size: 3.5em;
@@ -374,6 +525,464 @@
   .math-btn.correct { background: linear-gradient(135deg, #27ae60, #2ecc71); box-shadow: 0 5px 0 #1e8449; }
   .math-btn.incorrect { background: linear-gradient(135deg, #e74c3c, #c0392b); box-shadow: 0 5px 0 #922b21; }
 
+  /* ═══════════════════ SETTINGS OVERLAY ═══════════════════ */
+  .settings-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(5px);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+    overflow-y: auto;
+    padding: 20px;
+  }
+
+  .settings-overlay.show { display: flex; }
+
+  .settings-content {
+    background: white;
+    border-radius: 25px;
+    padding: 30px;
+    max-width: 550px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: victoryPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+  }
+
+  .settings-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.8em;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .settings-section {
+    margin-bottom: 25px;
+  }
+
+  .settings-section h3 {
+    font-family: 'Fredoka One', cursive;
+    color: #2c3e50;
+    font-size: 1.2em;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .word-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    align-items: center;
+  }
+
+  .word-row input {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95em;
+    padding: 8px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .word-row input:focus { border-color: #1abc9c; }
+
+  .word-row .emoji-input { width: 50px; text-align: center; font-size: 1.2em; }
+  .word-row .word-input { width: 100px; }
+  .word-row .hint-input { flex: 1; min-width: 120px; }
+
+  .word-row .btn-delete-word {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .word-row .btn-delete-word:hover { background: #c0392b; transform: scale(1.1); }
+
+  .btn-add-word {
+    background: linear-gradient(135deg, #1abc9c, #16a085);
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-add-word:hover { transform: translateY(-2px); }
+
+  .btn-reset-words {
+    background: rgba(0,0,0,0.05);
+    color: #7f8c8d;
+    border: 2px solid #e0e0e0;
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: 10px;
+  }
+
+  .btn-reset-words:hover { background: rgba(0,0,0,0.1); }
+
+  .times-table-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .tt-toggle {
+    padding: 12px;
+    border: 3px solid #e0e0e0;
+    border-radius: 12px;
+    background: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.3em;
+    color: #95a5a6;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+
+  .tt-toggle.active {
+    border-color: #1abc9c;
+    background: linear-gradient(135deg, #d5f5e3, #abebc6);
+    color: #1e8449;
+    box-shadow: 0 3px 10px rgba(26,188,156,0.2);
+  }
+
+  .tt-toggle:hover { transform: translateY(-2px); }
+
+  .btn-close-settings {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: white;
+    border: none;
+    padding: 12px 35px;
+    border-radius: 12px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.1em;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    transition: all 0.2s;
+  }
+
+  .btn-close-settings:hover { transform: translateY(-2px); }
+
+  /* ═══════════════════ BOSS BATTLE ═══════════════════ */
+  .boss-card {
+    display: none;
+    text-align: center;
+    animation: cardIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .boss-card.show { display: block; }
+
+  .boss-arena {
+    background: linear-gradient(180deg, #1a0505 0%, #3d1111 50%, #2a0a0a 100%);
+    border-radius: 25px;
+    padding: 25px 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4), inset 0 0 60px rgba(255,0,0,0.05);
+    margin-bottom: 15px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .boss-arena::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #e74c3c, #ff6b6b, #e74c3c);
+  }
+
+  .boss-intro-text {
+    font-family: 'Fredoka One', cursive;
+    color: #ff6b6b;
+    font-size: 1.4em;
+    margin-bottom: 15px;
+    text-shadow: 0 0 15px rgba(255,0,0,0.3);
+    animation: bossPulseText 2s infinite;
+  }
+
+  @keyframes bossPulseText {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  /* Pixel art bear using box-shadow */
+  .boss-bear-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0 30px;
+    min-height: 200px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .boss-bear {
+    width: 8px;
+    height: 8px;
+    background: transparent;
+    transform: scale(4);
+    transition: all 0.3s ease;
+    image-rendering: pixelated;
+    box-shadow:
+      /* Row 1 - ears */
+      16px 0px 0 #5D3A1A, 24px 0px 0 #5D3A1A,
+      64px 0px 0 #5D3A1A, 72px 0px 0 #5D3A1A,
+      /* Row 2 - ears inner */
+      8px 8px 0 #5D3A1A, 16px 8px 0 #8B5E3C, 24px 8px 0 #8B5E3C, 32px 8px 0 #5D3A1A,
+      56px 8px 0 #5D3A1A, 64px 8px 0 #8B5E3C, 72px 8px 0 #8B5E3C, 80px 8px 0 #5D3A1A,
+      /* Row 3 - top of head */
+      16px 16px 0 #5D3A1A, 24px 16px 0 #5D3A1A, 32px 16px 0 #7A4F2B, 40px 16px 0 #7A4F2B,
+      48px 16px 0 #7A4F2B, 56px 16px 0 #7A4F2B, 64px 16px 0 #5D3A1A, 72px 16px 0 #5D3A1A,
+      /* Row 4 - forehead */
+      16px 24px 0 #7A4F2B, 24px 24px 0 #7A4F2B, 32px 24px 0 #7A4F2B, 40px 24px 0 #7A4F2B,
+      48px 24px 0 #7A4F2B, 56px 24px 0 #7A4F2B, 64px 24px 0 #7A4F2B, 72px 24px 0 #7A4F2B,
+      /* Row 5 - eyes */
+      8px 32px 0 #7A4F2B, 16px 32px 0 #7A4F2B, 24px 32px 0 #ff0000, 32px 32px 0 #cc0000,
+      40px 32px 0 #7A4F2B, 48px 32px 0 #7A4F2B, 56px 32px 0 #ff0000, 64px 32px 0 #cc0000,
+      72px 32px 0 #7A4F2B, 80px 32px 0 #7A4F2B,
+      /* Row 6 - snout top */
+      8px 40px 0 #7A4F2B, 16px 40px 0 #7A4F2B, 24px 40px 0 #7A4F2B, 32px 40px 0 #C4956A,
+      40px 40px 0 #C4956A, 48px 40px 0 #C4956A, 56px 40px 0 #C4956A, 64px 40px 0 #7A4F2B,
+      72px 40px 0 #7A4F2B, 80px 40px 0 #7A4F2B,
+      /* Row 7 - nose & mouth */
+      16px 48px 0 #7A4F2B, 24px 48px 0 #C4956A, 32px 48px 0 #C4956A, 40px 48px 0 #222,
+      48px 48px 0 #222, 56px 48px 0 #C4956A, 64px 48px 0 #C4956A, 72px 48px 0 #7A4F2B,
+      /* Row 8 - fangs */
+      16px 56px 0 #7A4F2B, 24px 56px 0 #C4956A, 32px 56px 0 #fff, 40px 56px 0 #C4956A,
+      48px 56px 0 #C4956A, 56px 56px 0 #fff, 64px 56px 0 #C4956A, 72px 56px 0 #7A4F2B,
+      /* Row 9 - chin */
+      24px 64px 0 #7A4F2B, 32px 64px 0 #7A4F2B, 40px 64px 0 #7A4F2B, 48px 64px 0 #7A4F2B,
+      56px 64px 0 #7A4F2B, 64px 64px 0 #7A4F2B,
+      /* Row 10-12 - body */
+      16px 72px 0 #5D3A1A, 24px 72px 0 #7A4F2B, 32px 72px 0 #7A4F2B, 40px 72px 0 #7A4F2B,
+      48px 72px 0 #7A4F2B, 56px 72px 0 #7A4F2B, 64px 72px 0 #7A4F2B, 72px 72px 0 #5D3A1A,
+      8px 80px 0 #5D3A1A, 16px 80px 0 #7A4F2B, 24px 80px 0 #7A4F2B, 32px 80px 0 #7A4F2B,
+      40px 80px 0 #C4956A, 48px 80px 0 #C4956A, 56px 80px 0 #7A4F2B, 64px 80px 0 #7A4F2B,
+      72px 80px 0 #7A4F2B, 80px 80px 0 #5D3A1A,
+      /* Row 13 - arms/claws */
+      0px 88px 0 #5D3A1A, 8px 88px 0 #7A4F2B, 16px 88px 0 #7A4F2B, 24px 88px 0 #7A4F2B,
+      32px 88px 0 #7A4F2B, 40px 88px 0 #C4956A, 48px 88px 0 #C4956A, 56px 88px 0 #7A4F2B,
+      64px 88px 0 #7A4F2B, 72px 88px 0 #7A4F2B, 80px 88px 0 #7A4F2B, 88px 88px 0 #5D3A1A,
+      /* Row 14 - lower body */
+      0px 96px 0 #444, 8px 96px 0 #5D3A1A, 16px 96px 0 #7A4F2B, 24px 96px 0 #7A4F2B,
+      32px 96px 0 #7A4F2B, 40px 96px 0 #7A4F2B, 48px 96px 0 #7A4F2B, 56px 96px 0 #7A4F2B,
+      64px 96px 0 #7A4F2B, 72px 96px 0 #7A4F2B, 80px 96px 0 #5D3A1A, 88px 96px 0 #444,
+      /* Row 15 - feet */
+      8px 104px 0 #444, 16px 104px 0 #5D3A1A, 24px 104px 0 #5D3A1A,
+      64px 104px 0 #5D3A1A, 72px 104px 0 #5D3A1A, 80px 104px 0 #444;
+  }
+
+  .boss-bear.idle {
+    animation: bossBreath 2s infinite ease-in-out;
+  }
+
+  @keyframes bossBreath {
+    0%, 100% { transform: scale(4) translateY(0); }
+    50% { transform: scale(4.1) translateY(-2px); }
+  }
+
+  .boss-bear.hit {
+    animation: bossHitAnim 0.5s ease;
+  }
+
+  @keyframes bossHitAnim {
+    0% { transform: scale(4); filter: brightness(1); }
+    15% { transform: scale(4) translateX(-8px); filter: brightness(3) hue-rotate(0deg); }
+    30% { transform: scale(4) translateX(8px); filter: brightness(1) hue-rotate(0deg); }
+    45% { transform: scale(4) translateX(-5px); filter: brightness(2); }
+    60% { transform: scale(4) translateX(5px); filter: brightness(1); }
+    100% { transform: scale(4) translateX(0); filter: brightness(1); }
+  }
+
+  .boss-bear.attack {
+    animation: bossAttackAnim 0.6s ease;
+  }
+
+  @keyframes bossAttackAnim {
+    0% { transform: scale(4) translateY(0); }
+    30% { transform: scale(4.5) translateY(-10px); }
+    60% { transform: scale(5) translateY(15px); }
+    100% { transform: scale(4) translateY(0); }
+  }
+
+  .boss-bear.defeated {
+    animation: bossDefeatAnim 1.5s ease forwards;
+  }
+
+  @keyframes bossDefeatAnim {
+    0% { transform: scale(4); opacity: 1; filter: brightness(1); }
+    30% { transform: scale(4.5) rotate(10deg); filter: brightness(2); }
+    60% { transform: scale(3) rotate(-20deg); opacity: 0.6; filter: brightness(0.5); }
+    100% { transform: scale(0) rotate(360deg); opacity: 0; }
+  }
+
+  .boss-hp-container, .player-hp-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 8px 0;
+  }
+
+  .hp-label {
+    font-family: 'Fredoka One', cursive;
+    color: #ccc;
+    font-size: 0.9em;
+    min-width: 60px;
+    text-align: right;
+  }
+
+  .hp-bar-outer {
+    flex: 1;
+    max-width: 300px;
+    height: 22px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 11px;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.1);
+  }
+
+  .hp-bar-inner {
+    height: 100%;
+    border-radius: 9px;
+    transition: width 0.5s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hp-bar-inner::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 50%;
+    background: rgba(255,255,255,0.2);
+    border-radius: 9px 9px 0 0;
+  }
+
+  .boss-hp .hp-bar-inner { background: linear-gradient(90deg, #e74c3c, #ff6b6b); }
+  .player-hp .hp-bar-inner { background: linear-gradient(90deg, #27ae60, #2ecc71); }
+
+  .player-hearts {
+    font-size: 1.8em;
+    letter-spacing: 5px;
+  }
+
+  .player-hearts .heart { transition: all 0.3s ease; display: inline-block; }
+  .player-hearts .heart.lost { transform: scale(0); opacity: 0; filter: grayscale(1); }
+  .player-hearts .heart.breaking { animation: heartBreak 0.5s ease forwards; }
+  @keyframes heartBreak {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.3); filter: brightness(2); }
+    100% { transform: scale(0) rotate(180deg); opacity: 0; }
+  }
+
+  .boss-timer-bar {
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    margin: 12px 0;
+    overflow: hidden;
+  }
+
+  .boss-timer-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e74c3c, #f39c12, #2ecc71);
+    border-radius: 4px;
+    transition: width 0.1s linear;
+    width: 100%;
+  }
+
+  .boss-question-area {
+    background: rgba(255,255,255,0.95);
+    border-radius: 18px;
+    padding: 20px;
+    margin-top: 10px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    transition: opacity 0.5s ease;
+  }
+
+  .boss-math-equation {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5em;
+    color: #2c3e50;
+    margin-bottom: 12px;
+  }
+
+  .boss-spelling-hint {
+    font-size: 1.1em;
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+
+  .boss-spelling-emoji {
+    font-size: 2.5em;
+    margin-bottom: 8px;
+  }
+
+  .boss-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    max-width: 350px;
+    margin: 0 auto;
+  }
+
+  .boss-option-btn {
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.3em;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: linear-gradient(135deg, #8e44ad, #9b59b6);
+    box-shadow: 0 4px 0 #6c3483;
+  }
+
+  .boss-option-btn:hover { transform: translateY(-2px); }
+  .boss-option-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #6c3483; }
+  .boss-option-btn.correct { background: linear-gradient(135deg, #27ae60, #2ecc71); box-shadow: 0 4px 0 #1e8449; }
+  .boss-option-btn.incorrect { background: linear-gradient(135deg, #e74c3c, #c0392b); box-shadow: 0 4px 0 #922b21; }
+
+  .screen-shake { animation: screenShake 0.4s ease; }
+  @keyframes screenShake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-10px) translateY(5px); }
+    40% { transform: translateX(10px) translateY(-5px); }
+    60% { transform: translateX(-7px) translateY(3px); }
+    80% { transform: translateX(7px) translateY(-3px); }
+  }
+
+  /* ═══════════════════ VICTORY ═══════════════════ */
   .victory-overlay {
     display: none;
     position: fixed;
@@ -391,11 +1000,12 @@
 
   .victory-content {
     text-align: center;
-    background: white;
-    padding: 30px;
+    background: linear-gradient(135deg, #ffffff, #f8f9fa);
+    padding: 35px;
     border-radius: 25px;
     max-width: 90%;
     animation: victoryPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
   }
 
   @keyframes victoryPop {
@@ -407,6 +1017,56 @@
   @keyframes hug { from { transform: scale(1); } to { transform: scale(1.1); } }
 
   .hug-text { font-family: 'Fredoka One', cursive; color: #2c3e50; font-size: 1.8em; margin: 10px 0; }
+
+  .pounds-display {
+    margin: 20px 0;
+  }
+
+  .pounds-title {
+    font-family: 'Fredoka One', cursive;
+    color: #f39c12;
+    font-size: 1.3em;
+    margin-bottom: 10px;
+  }
+
+  .pounds-coins {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .pound-coin {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #f1c40f, #f39c12);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.2em;
+    color: #8B6914;
+    box-shadow: 0 4px 10px rgba(241,196,15,0.4), inset 0 -3px 6px rgba(0,0,0,0.15), inset 0 3px 6px rgba(255,255,255,0.3);
+    transform: scale(0);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 3px solid #d4ac0d;
+  }
+
+  .pound-coin.show { transform: scale(1); }
+  .pound-coin.empty {
+    background: linear-gradient(135deg, #bdc3c7, #95a5a6);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1), inset 0 -3px 6px rgba(0,0,0,0.1);
+    border-color: #7f8c8d;
+    color: #7f8c8d;
+  }
+
+  .pounds-total {
+    font-family: 'Fredoka One', cursive;
+    color: #7f8c8d;
+    font-size: 1em;
+    margin-top: 8px;
+  }
 
   .confetti { position: fixed; top: -10px; z-index: 1001; pointer-events: none; animation: confettiFall linear forwards; }
   @keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
@@ -425,147 +1085,79 @@
   .streak-display { text-align: center; font-size: 1.2em; min-height: 25px; margin-bottom: 2px; }
   .touch-letter { position: fixed; z-index: 9999; pointer-events: none; opacity: 0.9; transform: scale(1.2); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
 
-  /* 📱 MOBILE SQUASH STYLES 📱 */
+  /* ═══════════════════ MOBILE ═══════════════════ */
   @media (max-width: 600px) {
-    .game-container {
-      padding: 8px; /* Tighter container */
-    }
+    .game-container { padding: 8px; }
+
+    .start-mascot { font-size: 80px; }
+    .start-title { font-size: 2.2em; }
+    .start-subtitle { font-size: 1.1em; }
+    .btn-start { font-size: 1.4em; padding: 14px 45px; }
 
     .header {
-      margin-bottom: 5px; /* Pull it up */
+      margin-bottom: 5px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px; /* Put Koala NEXT to the title! */
-    }
-
-    .header-text {
-      text-align: left;
-    }
-
-    .mascot {
-      font-size: 45px; /* Smaller Koala */
-    }
-
-    .header h1 { 
-      font-size: 1.6em; 
-      margin-bottom: 0px;
-    }
-
-    .header p {
-      font-size: 0.85em; /* Smaller subtitle */
-    }
-
-    .score-board {
-      margin: 2px 0 8px;
-      gap: 8px;
-    }
-
-    .score-item {
-      padding: 4px 10px;
-      font-size: 0.85em;
-    }
-
-    .progress-bar-container {
-      margin: 5px 0;
-    }
-
-    .progress-bar {
-      height: 20px;
-      font-size: 0.75em;
-    }
-
-    .game-card {
-      padding: 12px;
-      border-radius: 20px;
-      margin-bottom: 5px;
-    }
-
-    .word-image-container {
-      margin-bottom: 5px;
-    }
-
-    .word-image { 
-      width: 75px; 
-      height: 75px; 
-      font-size: 38px; 
-      border-width: 3px;
-    }
-
-    .word-hint {
-      margin-top: 5px;
-      font-size: 0.9em;
-    }
-
-    .slots-container {
-      margin: 8px 0;
-      min-height: 42px;
-      gap: 4px;
-    }
-
-    .letter-slot { 
-      width: 35px; 
-      height: 40px; 
-      font-size: 1.3em; 
-      border-radius: 8px;
-    }
-
-    .letters-pool {
-      margin: 5px 0;
-      padding: 8px;
-      min-height: 50px;
-      gap: 5px;
-      border-radius: 10px;
-    }
-
-    .draggable-letter { 
-      width: 35px; 
-      height: 40px; 
-      font-size: 1.3em; 
-      border-radius: 8px;
-      box-shadow: 0 2px 0 #117a65;
-    }
-
-    .btn-container {
-      margin-top: 5px;
-      gap: 5px;
-    }
-
-    .btn { 
-      padding: 8px 12px; 
-      font-size: 0.85em; 
-      border-radius: 8px;
-    }
-
-    .feedback {
-      margin: 2px 0;
-      font-size: 1em;
-      min-height: 25px;
-    }
-
-    /* Math tweaks for mobile */
-    .math-equation { 
-      font-size: 2.8em; 
-      margin: 10px 0;
-    }
-
-    .math-options {
       gap: 10px;
-      margin-bottom: 10px;
-      max-width: 280px;
     }
+    .header-text { text-align: left; }
+    .mascot { font-size: 45px; }
+    .header h1 { font-size: 1.6em; margin-bottom: 0px; }
+    .header p { font-size: 0.85em; }
 
-    .math-btn { 
-      font-size: 1.4em; 
-      padding: 12px; 
-      border-radius: 12px;
-      box-shadow: 0 4px 0 #1f618d;
+    .settings-gear { top: 10px; right: 10px; width: 40px; height: 40px; font-size: 22px; }
+
+    .score-board { margin: 2px 0 8px; gap: 8px; }
+    .score-item { padding: 4px 10px; font-size: 0.85em; }
+
+    .progress-bar-container { margin: 5px 0; }
+    .progress-bar { height: 20px; font-size: 0.75em; }
+
+    .game-card { padding: 12px; border-radius: 20px; margin-bottom: 5px; }
+
+    .word-image-container { margin-bottom: 5px; }
+    .word-image { width: 75px; height: 75px; font-size: 38px; border-width: 3px; }
+    .word-hint { margin-top: 5px; font-size: 0.9em; }
+
+    .slots-container { margin: 8px 0; min-height: 42px; gap: 4px; }
+    .letter-slot { width: 35px; height: 40px; font-size: 1.3em; border-radius: 8px; }
+
+    .letters-pool { margin: 5px 0; padding: 8px; min-height: 50px; gap: 5px; border-radius: 10px; }
+    .draggable-letter { width: 35px; height: 40px; font-size: 1.3em; border-radius: 8px; box-shadow: 0 2px 0 #117a65; }
+
+    .btn-container { margin-top: 5px; gap: 5px; }
+    .btn { padding: 8px 12px; font-size: 0.85em; border-radius: 8px; }
+
+    .feedback { margin: 2px 0; font-size: 1em; min-height: 25px; }
+
+    .math-equation { font-size: 2.8em; margin: 10px 0; }
+    .math-options { gap: 10px; margin-bottom: 10px; max-width: 280px; }
+    .math-btn { font-size: 1.4em; padding: 12px; border-radius: 12px; box-shadow: 0 4px 0 #1f618d; }
+    .math-btn:active { box-shadow: 0 0 0 #1f618d; transform: translateY(4px); }
+
+    /* Settings mobile */
+    .settings-content { padding: 20px; border-radius: 18px; }
+    .settings-title { font-size: 1.4em; }
+    .word-row { flex-wrap: wrap; }
+    .word-row .hint-input { width: 100%; min-width: unset; }
+    .times-table-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .tt-toggle { padding: 10px; font-size: 1.1em; }
+
+    /* Boss mobile */
+    .boss-arena { padding: 15px 12px; }
+    .boss-bear { transform: scale(2.5) !important; }
+    .boss-bear.idle { animation: bossBreathe_mobile 2s infinite ease-in-out; }
+    @keyframes bossBreathe_mobile {
+      0%, 100% { transform: scale(2.5) translateY(0); }
+      50% { transform: scale(2.6) translateY(-2px); }
     }
-    
-    .math-btn:active {
-        box-shadow: 0 0 0 #1f618d;
-        transform: translateY(4px);
-    }
+    .boss-bear-container { min-height: 100px; }
+    .boss-math-equation { font-size: 2em; }
+    .boss-option-btn { font-size: 1.1em; padding: 10px; }
+    .player-hearts { font-size: 1.4em; }
+
+    .pound-coin { width: 40px; height: 40px; font-size: 1em; }
   }
 </style>
 </head>
@@ -573,7 +1165,23 @@
 
 <div class="leaves" id="leaves"></div>
 
-<div class="game-container">
+<!-- ═══════════════════ START SCREEN ═══════════════════ -->
+<div class="game-container" id="startScreen">
+  <div class="start-screen">
+    <span class="start-mascot">🐨</span>
+    <div class="start-title">Koali's Adventure</div>
+    <div class="start-subtitle">Spell & Math Time!</div>
+    <div class="start-pounds" id="startPounds">🪙 0 Koali Pounds</div>
+    <br>
+    <button class="btn-start" onclick="startGame()">🎮 Play!</button>
+    <button class="btn-settings-start" onclick="openSettings()">⚙️ Settings</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ GAME SCREEN ═══════════════════ -->
+<div class="game-container" id="gameScreen" style="display: none;">
+  <div class="settings-gear" onclick="openSettings()">⚙️</div>
+
   <div class="header">
     <div class="mascot-container" onclick="koaliCheer()">
       <span class="mascot" id="mascot">🐨</span>
@@ -588,6 +1196,7 @@
     <div class="score-item">⭐ <span id="score">0</span></div>
     <div class="score-item">🌿 <span id="streak">0</span></div>
     <div class="score-item">💡 <span id="hints">3</span></div>
+    <div class="score-item">🪙 <span id="totalPoundsDisplay">0</span></div>
   </div>
 
   <div class="progress-bar-container">
@@ -597,21 +1206,18 @@
   <!-- SPELLING CARD -->
   <div class="game-card" id="spellingCard">
     <div class="round-counter" id="spellingCounter">Round 1 of 22 (Spelling)</div>
-
     <div class="word-image-container">
       <div class="word-image" id="wordImage">?</div>
       <div class="word-hint" id="wordHint">...</div>
     </div>
-
     <div class="slots-container" id="slotsContainer"></div>
     <div class="streak-display" id="spellingStreakDisplay"></div>
     <div class="letters-pool" id="lettersPool"></div>
     <div class="feedback" id="spellingFeedback"></div>
-
     <div class="btn-container">
       <button class="btn btn-hint" id="btnHint" onclick="useHint()">💡</button>
       <button class="btn btn-clear" onclick="clearSlots()">🔄</button>
-      <button class="btn btn-check" onclick="checkWord()">✅</button>
+      <button class="btn btn-check" id="btnCheck" onclick="checkWord()">✅</button>
       <button class="btn btn-skip" onclick="skipRound()">⏭️</button>
     </div>
   </div>
@@ -619,40 +1225,102 @@
   <!-- MATH CARD -->
   <div class="game-card" id="mathCard" style="display: none;">
     <div class="round-counter" id="mathCounter">Round 2 of 22 (Math)</div>
-    
     <div class="math-equation" id="mathEquation">3 × 4 = ?</div>
-    <div class="math-options" id="mathOptions">
-       <!-- Buttons injected by JS -->
-    </div>
-
+    <div class="math-options" id="mathOptions"></div>
     <div class="streak-display" id="mathStreakDisplay"></div>
     <div class="feedback" id="mathFeedback"></div>
-
     <div class="btn-container">
       <button class="btn btn-skip" onclick="skipRound()">⏭️ Skip</button>
     </div>
   </div>
 
+  <!-- BOSS CARD -->
+  <div class="boss-card" id="bossCard">
+    <div class="boss-arena" id="bossArena">
+      <div class="boss-intro-text" id="bossIntroText">⚔️ BOSS BATTLE! ⚔️</div>
+
+      <div class="boss-hp-container">
+        <div class="hp-label" style="color: #ff6b6b;">BEAR</div>
+        <div class="hp-bar-outer boss-hp">
+          <div class="hp-bar-inner" id="bossHpBar" style="width: 100%;"></div>
+        </div>
+      </div>
+
+      <div class="boss-bear-container">
+        <div class="boss-bear idle" id="bossBear"></div>
+      </div>
+
+      <div class="player-hp-container">
+        <div class="hp-label" style="color: #2ecc71;">YOU</div>
+        <div class="player-hearts" id="playerHearts">
+          <span class="heart">❤️</span>
+          <span class="heart">❤️</span>
+          <span class="heart">❤️</span>
+        </div>
+      </div>
+
+      <div class="boss-timer-bar" id="bossTimerBar">
+        <div class="boss-timer-fill" id="bossTimerFill"></div>
+      </div>
+    </div>
+
+    <div class="boss-question-area" id="bossQuestionArea">
+      <div id="bossQuestionContent"></div>
+      <div class="boss-options" id="bossOptions"></div>
+    </div>
+
+    <div class="feedback" id="bossFeedback" style="margin-top: 10px;"></div>
+  </div>
 </div>
 
-<!-- Victory Overlay -->
+<!-- ═══════════════════ SETTINGS OVERLAY ═══════════════════ -->
+<div class="settings-overlay" id="settingsOverlay">
+  <div class="settings-content">
+    <div class="settings-title">⚙️ Settings</div>
+
+    <div class="settings-section">
+      <h3>📝 Spelling Words</h3>
+      <div id="wordListEditor"></div>
+      <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+        <button class="btn-add-word" onclick="addWordRow()">+ Add Word</button>
+        <button class="btn-reset-words" onclick="resetWordsToDefault()">Reset Defaults</button>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3>🔢 Times Tables</h3>
+      <div class="times-table-grid" id="timesTableGrid"></div>
+    </div>
+
+    <button class="btn-close-settings" onclick="closeSettings()">✅ Save & Close</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ VICTORY OVERLAY ═══════════════════ -->
 <div class="victory-overlay" id="victoryOverlay">
   <div class="victory-content">
     <span class="koala-hug">🐨🌿</span>
-    <div class="hug-text">AMAZING!</div>
-    <p style="font-size: 1.1em; color: #7f8c8d; margin-bottom: 15px;">
+    <div class="hug-text" id="victoryTitle">AMAZING!</div>
+    <p id="victoryMessage" style="font-size: 1.1em; color: #7f8c8d; margin-bottom: 15px;">
       You spelled the words AND did the math! Koali is SO proud!
     </p>
-    <div style="color: #f39c12; font-family: 'Fredoka One', cursive; font-size: 1.5em; margin-bottom: 15px;">
+    <div style="color: #f39c12; font-family: 'Fredoka One', cursive; font-size: 1.5em; margin-bottom: 10px;">
       Score: <span id="finalScore">0</span> ⭐
     </div>
-    <button class="btn btn-play" onclick="restartGame()">🎮 Play Again!</button>
+
+    <div class="pounds-display">
+      <div class="pounds-title">Koali Pounds Earned:</div>
+      <div class="pounds-coins" id="poundsCoins"></div>
+      <div class="pounds-total" id="poundsTotal">Total: 0 🪙</div>
+    </div>
+
+    <button class="btn btn-play" onclick="goToStartScreen()">🎮 Play Again!</button>
   </div>
 </div>
 
 <script>
-// Words
-const WORDS = [
+// ═══════════════════ DEFAULT DATA ═══════════════════
+const DEFAULT_WORDS = [
   { word: "play", emoji: "🎮", hint: "Having fun with games or toys" },
   { word: "well", emoji: "👍", hint: "Doing something in a good way" },
   { word: "just", emoji: "⚖️", hint: "Only, or fair and right" },
@@ -666,28 +1334,139 @@ const WORDS = [
   { word: "zoom", emoji: "🏎️", hint: "To move really, really fast!" }
 ];
 
-const TOTAL_ROUNDS = WORDS.length * 2;
-let currentRoundCount = 0; 
-let currentSpellingIndex = 0;
+const DEFAULT_TABLES = [4, 9];
 
-let score = 0;
-let streak = 0;
-let hintsLeft = 3;
+// ═══════════════════ localStorage HELPERS ═══════════════════
+function loadWords() {
+  try {
+    const stored = localStorage.getItem('koali_customWords');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch(e) {}
+  return DEFAULT_WORDS.map(function(w) { return {word: w.word, emoji: w.emoji, hint: w.hint}; });
+}
 
-// Game State
-let currentMathAnswer = 0;
-let slotContents = [];
-let shuffledLetters = [];
-let draggedLetter = null;
-let draggedLetterIndex = null;
-let touchDragElement = null;
-let touchSourceIndex = null;
+function saveWords(words) {
+  localStorage.setItem('koali_customWords', JSON.stringify(words));
+}
 
+function loadTimesTables() {
+  try {
+    const stored = localStorage.getItem('koali_timesTables');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch(e) {}
+  return DEFAULT_TABLES.slice();
+}
+
+function saveTimesTables(tables) {
+  localStorage.setItem('koali_timesTables', JSON.stringify(tables));
+}
+
+function loadTotalPounds() {
+  return parseInt(localStorage.getItem('koali_totalPounds') || '0', 10);
+}
+
+function saveTotalPounds(total) {
+  localStorage.setItem('koali_totalPounds', total.toString());
+}
+
+// ═══════════════════ GAME STATE ═══════════════════
+var activeWords = loadWords();
+var activeTimesTables = loadTimesTables();
+var TOTAL_ROUNDS = activeWords.length * 2;
+
+var gamePhase = 'start'; // 'start' | 'playing' | 'boss' | 'victory'
+var currentRoundCount = 0;
+var currentSpellingIndex = 0;
+
+var score = 0;
+var streak = 0;
+var maxStreak = 0;
+var hintsLeft = 3;
+var correctAnswers = 0;
+var totalQuestions = 0;
+
+// Boss state
+var bossHp = 100;
+var playerHeartsCount = 3;
+var bossTimerInterval = null;
+var bossTimerTimeout = null;
+var currentBossAnswer = null;
+var bossRoundsPlayed = 0;
+var bossHeartsLost = 0;
+
+// Spelling state
+var currentMathAnswer = 0;
+var slotContents = [];
+var shuffledLetters = [];
+var draggedLetter = null;
+var draggedLetterIndex = null;
+var touchDragElement = null;
+var touchSourceIndex = null;
+
+// ═══════════════════ INIT ═══════════════════
+var AudioContextClass = window.AudioContext || window.webkitAudioContext;
+var audioCtx = new AudioContextClass();
+
+function init() {
+  createLeaves();
+  updateStartScreen();
+}
+
+function updateStartScreen() {
+  var total = loadTotalPounds();
+  document.getElementById('startPounds').textContent = '\uD83E\uDE99 ' + total + ' Koali Pound' + (total !== 1 ? 's' : '');
+}
+
+function startGame() {
+  activeWords = loadWords();
+  activeTimesTables = loadTimesTables();
+  TOTAL_ROUNDS = activeWords.length * 2;
+
+  gamePhase = 'playing';
+  currentRoundCount = 0;
+  currentSpellingIndex = 0;
+  score = 0;
+  streak = 0;
+  maxStreak = 0;
+  hintsLeft = 3;
+  correctAnswers = 0;
+  totalQuestions = 0;
+
+  document.getElementById('hints').textContent = '3';
+  document.getElementById('totalPoundsDisplay').textContent = loadTotalPounds();
+
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('gameScreen').style.display = 'flex';
+  document.getElementById('bossCard').classList.remove('show');
+  document.getElementById('spellingCard').style.display = 'flex';
+  document.getElementById('mathCard').style.display = 'none';
+
+  document.body.classList.remove('boss-mode');
+  playSound('pop');
+  loadChallenge();
+}
+
+function goToStartScreen() {
+  document.getElementById('victoryOverlay').classList.remove('show');
+  document.getElementById('gameScreen').style.display = 'none';
+  document.getElementById('startScreen').style.display = 'flex';
+  document.body.classList.remove('boss-mode');
+  gamePhase = 'start';
+  updateStartScreen();
+}
+
+// ═══════════════════ LEAVES ═══════════════════
 function createLeaves() {
-  const container = document.getElementById('leaves');
-  const leafTypes = ['🍃', '🌿', '🍂', '🌱'];
-  for (let i = 0; i < 20; i++) {
-    const leaf = document.createElement('div');
+  var container = document.getElementById('leaves');
+  var leafTypes = ['\uD83C\uDF43', '\uD83C\uDF3F', '\uD83C\uDF42', '\uD83C\uDF31'];
+  for (var i = 0; i < 20; i++) {
+    var leaf = document.createElement('div');
     leaf.className = 'leaf';
     leaf.textContent = leafTypes[Math.floor(Math.random() * leafTypes.length)];
     leaf.style.left = Math.random() * 100 + '%';
@@ -699,19 +1478,25 @@ function createLeaves() {
   }
 }
 
+// ═══════════════════ MASCOT ═══════════════════
 function koaliCheer() {
-  const mascot = document.getElementById('mascot');
+  var mascot = document.getElementById('mascot');
   mascot.classList.remove('cheer');
-  void mascot.offsetWidth; 
+  void mascot.offsetWidth;
   mascot.classList.add('cheer');
 }
 
+// ═══════════════════ GAME FLOW ═══════════════════
 function loadChallenge() {
   if (currentRoundCount >= TOTAL_ROUNDS) {
-    showVictory();
+    startBossBattle();
     return;
   }
   updateProgress();
+
+  var btnCheck = document.getElementById('btnCheck');
+  if (btnCheck) btnCheck.classList.remove('pulse');
+
   if (currentRoundCount % 2 === 0) {
     document.getElementById('spellingCard').style.display = 'flex';
     document.getElementById('mathCard').style.display = 'none';
@@ -733,81 +1518,90 @@ function skipRound() {
   updateStreakUI();
   playSound('pop');
   if (currentRoundCount % 2 === 0) {
-      currentSpellingIndex = (currentSpellingIndex + 1) % WORDS.length;
+    currentSpellingIndex = (currentSpellingIndex + 1) % activeWords.length;
   }
+  totalQuestions++;
   currentRoundCount++;
   loadChallenge();
 }
 
 function updateProgress() {
-  const pct = (currentRoundCount / TOTAL_ROUNDS) * 100;
-  const bar = document.getElementById('progressBar');
+  var pct = (currentRoundCount / TOTAL_ROUNDS) * 100;
+  var bar = document.getElementById('progressBar');
   bar.style.width = pct + '%';
-  bar.textContent = `${currentRoundCount} / ${TOTAL_ROUNDS}`;
+  bar.textContent = currentRoundCount + ' / ' + TOTAL_ROUNDS;
   document.getElementById('score').textContent = score;
   updateStreakUI();
 }
 
 function updateStreakUI() {
   document.getElementById('streak').textContent = streak;
-  const streakEmoji = '🌿';
-  const flames = streak >= 2 ? streakEmoji.repeat(Math.min(streak, 5)) : '';
+  var flames = streak >= 2 ? '\uD83C\uDF3F'.repeat(Math.min(streak, 5)) : '';
   document.getElementById('spellingStreakDisplay').textContent = flames;
   document.getElementById('mathStreakDisplay').textContent = flames;
+
+  if (streak === 3 || streak === 5) {
+    var activeCard = document.getElementById('spellingCard');
+    if (activeCard.style.display !== 'none') {
+      createSparkles(activeCard);
+    } else {
+      createSparkles(document.getElementById('mathCard'));
+    }
+  }
 }
 
-// MATH
+// ═══════════════════ MATH ═══════════════════
 function loadMathRound() {
-  document.getElementById('mathCounter').textContent = `Round ${currentRoundCount + 1} of ${TOTAL_ROUNDS} (Math)`;
+  document.getElementById('mathCounter').textContent = 'Round ' + (currentRoundCount + 1) + ' of ' + TOTAL_ROUNDS + ' (Math)';
   document.getElementById('mathFeedback').textContent = '';
   document.getElementById('mathFeedback').className = 'feedback';
-  
-  // Update to only 4 and 9 times tables
-  const base = Math.random() > 0.5 ? 4 : 9;
-  const multiplier = Math.floor(Math.random() * 12) + 1;
+
+  var base = activeTimesTables[Math.floor(Math.random() * activeTimesTables.length)];
+  var multiplier = Math.floor(Math.random() * 12) + 1;
   currentMathAnswer = base * multiplier;
 
-  document.getElementById('mathEquation').textContent = `${base} × ${multiplier} = ?`;
+  document.getElementById('mathEquation').textContent = base + ' \u00D7 ' + multiplier + ' = ?';
 
-  let options = [currentMathAnswer];
+  var options = [currentMathAnswer];
   while(options.length < 4) {
-    let wrongAnswer;
-    const errorType = Math.floor(Math.random() * 3);
+    var wrongAnswer;
+    var errorType = Math.floor(Math.random() * 3);
     if (errorType === 0) wrongAnswer = currentMathAnswer + base;
     else if (errorType === 1) wrongAnswer = Math.max(0, currentMathAnswer - base);
     else wrongAnswer = currentMathAnswer + (Math.random() > 0.5 ? 2 : -2);
-
-    if (!options.includes(wrongAnswer) && wrongAnswer >= 0) {
-      options.push(wrongAnswer);
-    }
+    if (options.indexOf(wrongAnswer) === -1 && wrongAnswer >= 0) options.push(wrongAnswer);
   }
   options = shuffleArray(options);
 
-  const optionsContainer = document.getElementById('mathOptions');
-  optionsContainer.innerHTML = '';
-  options.forEach(opt => {
-    const btn = document.createElement('button');
+  var optionsContainer = document.getElementById('mathOptions');
+  optionsContainer.textContent = '';
+  options.forEach(function(opt) {
+    var btn = document.createElement('button');
     btn.className = 'btn math-btn';
     btn.textContent = opt;
-    btn.onclick = () => checkMathAnswer(opt, btn);
+    btn.onclick = function() { checkMathAnswer(opt, btn); };
     optionsContainer.appendChild(btn);
   });
-  
-  const card = document.getElementById('mathCard');
+
+  var card = document.getElementById('mathCard');
   card.style.animation = 'none';
-  card.offsetHeight; 
-  card.style.animation = 'slideIn 0.5s ease';
+  card.offsetHeight;
+  card.style.animation = 'cardIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
 }
 
 function checkMathAnswer(selectedAnswer, btnElement) {
-  document.querySelectorAll('.math-btn').forEach(b => b.disabled = true);
+  var allBtns = document.querySelectorAll('.math-btn');
+  for (var i = 0; i < allBtns.length; i++) allBtns[i].disabled = true;
+  totalQuestions++;
   if (selectedAnswer === currentMathAnswer) {
     btnElement.classList.add('correct');
     streak++;
-    const bonus = Math.max(0, (streak - 1) * 5);
-    const points = 10 + bonus;
+    if (streak > maxStreak) maxStreak = streak;
+    correctAnswers++;
+    var bonus = Math.max(0, (streak - 1) * 5);
+    var points = 10 + bonus;
     score += points;
-    document.getElementById('mathFeedback').textContent = `🎉 Correct! +${points}`;
+    document.getElementById('mathFeedback').textContent = '\uD83C\uDF89 Correct! +' + points;
     document.getElementById('mathFeedback').className = 'feedback correct';
     playSound('correct');
     koaliCheer();
@@ -816,79 +1610,84 @@ function checkMathAnswer(selectedAnswer, btnElement) {
   } else {
     btnElement.classList.add('incorrect');
     streak = 0;
-    document.getElementById('mathFeedback').textContent = "❌ Oops!";
+    document.getElementById('mathFeedback').textContent = '\u274C Oops!';
     document.getElementById('mathFeedback').className = 'feedback incorrect';
     playSound('wrong');
-    document.querySelectorAll('.math-btn').forEach(b => {
-      if(parseInt(b.textContent) === currentMathAnswer) b.classList.add('correct');
-    });
+    for (var j = 0; j < allBtns.length; j++) {
+      if (parseInt(allBtns[j].textContent) === currentMathAnswer) allBtns[j].classList.add('correct');
+    }
     nextRound();
   }
   updateProgress();
 }
 
-// SPELLING
+// ═══════════════════ SPELLING ═══════════════════
 function loadSpellingRound() {
-  const wordData = WORDS[currentSpellingIndex % WORDS.length];
-  const word = wordData.word.toLowerCase();
-  document.getElementById('spellingCounter').textContent = `Round ${currentRoundCount + 1} of ${TOTAL_ROUNDS} (Spelling)`;
+  var wordData = activeWords[currentSpellingIndex % activeWords.length];
+  var word = wordData.word.toLowerCase();
+  document.getElementById('spellingCounter').textContent = 'Round ' + (currentRoundCount + 1) + ' of ' + TOTAL_ROUNDS + ' (Spelling)';
   document.getElementById('wordImage').textContent = wordData.emoji;
   document.getElementById('wordHint').textContent = wordData.hint;
   document.getElementById('spellingFeedback').textContent = '';
   document.getElementById('spellingFeedback').className = 'feedback';
 
-  const slotsContainer = document.getElementById('slotsContainer');
-  slotsContainer.innerHTML = '';
+  var slotsContainer = document.getElementById('slotsContainer');
+  slotsContainer.textContent = '';
   slotContents = new Array(word.length).fill(null);
 
-  for (let i = 0; i < word.length; i++) {
-    const slot = document.createElement('div');
+  for (var i = 0; i < word.length; i++) {
+    var slot = document.createElement('div');
     slot.className = 'letter-slot';
     slot.dataset.index = i;
     slot.addEventListener('dragover', handleDragOver);
     slot.addEventListener('dragenter', handleDragEnter);
     slot.addEventListener('dragleave', handleDragLeave);
     slot.addEventListener('drop', handleDrop);
-    slot.addEventListener('click', () => removeFromSlot(i));
+    slot.addEventListener('click', (function(idx) { return function() { removeFromSlot(idx); }; })(i));
     slot.addEventListener('touchend', handleSlotTouchEnd);
     slotsContainer.appendChild(slot);
   }
 
-  const extras = generateExtraLetters(word);
-  const allLetters = word.split('').concat(extras);
+  var extras = generateExtraLetters(word);
+  var allLetters = word.split('').concat(extras);
   shuffledLetters = shuffleArray(allLetters);
   renderLetterPool();
 
-  const card = document.getElementById('spellingCard');
+  var card = document.getElementById('spellingCard');
   card.style.animation = 'none';
-  card.offsetHeight; 
-  card.style.animation = 'slideIn 0.5s ease';
+  card.offsetHeight;
+  card.style.animation = 'cardIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+
+  document.getElementById('btnCheck').classList.remove('pulse');
 }
 
 function checkWord() {
-  const targetWord = WORDS[currentSpellingIndex % WORDS.length].word.toLowerCase();
-  const slots = document.querySelectorAll('.letter-slot');
-  let userWord = "";
-  let isComplete = true;
-  
-  slotContents.forEach(idx => {
+  var targetWord = activeWords[currentSpellingIndex % activeWords.length].word.toLowerCase();
+  var slots = document.querySelectorAll('.letter-slot');
+  var userWord = '';
+  var isComplete = true;
+
+  slotContents.forEach(function(idx) {
     if (idx === null) isComplete = false;
     else userWord += shuffledLetters[idx];
   });
 
   if (!isComplete) {
-    document.getElementById('spellingFeedback').textContent = "🤔 Fill in all letters!";
+    document.getElementById('spellingFeedback').textContent = '\uD83E\uDD14 Fill in all letters!';
     document.getElementById('spellingFeedback').className = 'feedback incorrect';
     return;
   }
 
+  totalQuestions++;
   if (userWord.toLowerCase() === targetWord) {
     streak++;
-    const bonus = Math.max(0, (streak - 1) * 5);
-    const points = 10 + bonus;
+    if (streak > maxStreak) maxStreak = streak;
+    correctAnswers++;
+    var bonus = Math.max(0, (streak - 1) * 5);
+    var points = 10 + bonus;
     score += points;
-    slots.forEach((slot, i) => setTimeout(() => slot.classList.add('correct'), i * 100));
-    document.getElementById('spellingFeedback').textContent = `🎉 Correct! +${points}`;
+    slots.forEach(function(slot, i) { setTimeout(function() { slot.classList.add('correct'); }, i * 100); });
+    document.getElementById('spellingFeedback').textContent = '\uD83C\uDF89 Correct! +' + points;
     document.getElementById('spellingFeedback').className = 'feedback correct';
     playSound('correct');
     koaliCheer();
@@ -899,53 +1698,57 @@ function checkWord() {
   } else {
     streak = 0;
     updateProgress();
-    slots.forEach((slot, i) => {
-      const letterIdx = slotContents[i];
+    slots.forEach(function(slot, i) {
+      var letterIdx = slotContents[i];
       if (letterIdx !== null) {
         if (shuffledLetters[letterIdx].toLowerCase() === targetWord[i]) slot.classList.add('correct');
         else slot.classList.add('incorrect');
       }
     });
-    document.getElementById('spellingFeedback').textContent = "❌ Oops!";
+    document.getElementById('spellingFeedback').textContent = '\u274C Oops!';
     document.getElementById('spellingFeedback').className = 'feedback incorrect';
     playSound('wrong');
-    setTimeout(() => { slots.forEach(slot => slot.classList.remove('incorrect')); }, 1200);
+    setTimeout(function() { slots.forEach(function(slot) { slot.classList.remove('incorrect'); }); }, 1200);
   }
 }
 
+// ═══════════════════ SPELLING HELPERS ═══════════════════
 function shuffleArray(arr) {
-  const shuffled = [...arr];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  var shuffled = arr.slice();
+  for (var i = shuffled.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = shuffled[i];
+    shuffled[i] = shuffled[j];
+    shuffled[j] = temp;
   }
   return shuffled;
 }
 
 function generateExtraLetters(word) {
-  const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-  const extras = [];
-  const numExtras = Math.max(2, Math.floor(word.length / 2));
-  const wordLetters = new Set(word.toLowerCase().split(''));
+  var alphabet = 'abcdefghijklmnopqrstuvwxyz';
+  var extras = [];
+  var numExtras = Math.max(2, Math.floor(word.length / 2));
+  var wordLetters = {};
+  word.toLowerCase().split('').forEach(function(l) { wordLetters[l] = true; });
   while (extras.length < numExtras) {
-    const randomLetter = alphabet[Math.floor(Math.random() * 26)];
-    if (!wordLetters.has(randomLetter) || Math.random() > 0.8) extras.push(randomLetter);
+    var randomLetter = alphabet[Math.floor(Math.random() * 26)];
+    if (!wordLetters[randomLetter] || Math.random() > 0.8) extras.push(randomLetter);
   }
   return extras;
 }
 
 function renderLetterPool() {
-  const pool = document.getElementById('lettersPool');
-  pool.innerHTML = '';
-  shuffledLetters.forEach((letter, index) => {
-    const el = document.createElement('div');
+  var pool = document.getElementById('lettersPool');
+  pool.textContent = '';
+  shuffledLetters.forEach(function(letter, index) {
+    var el = document.createElement('div');
     el.className = 'draggable-letter';
     el.textContent = letter.toUpperCase();
     el.draggable = true;
     el.dataset.index = index;
     el.dataset.letter = letter;
-    if (slotContents.includes(index)) el.classList.add('used');
-    
+    if (slotContents.indexOf(index) !== -1) el.classList.add('used');
+
     el.addEventListener('dragstart', handleDragStart);
     el.addEventListener('dragend', handleDragEnd);
     el.addEventListener('touchstart', handleTouchStart, { passive: false });
@@ -953,8 +1756,15 @@ function renderLetterPool() {
     el.addEventListener('touchend', handleTouchEnd);
     pool.appendChild(el);
   });
+
+  // Pulse check button when all slots are filled
+  var allFilled = slotContents.every(function(s) { return s !== null; });
+  var btnCheck = document.getElementById('btnCheck');
+  if (allFilled && slotContents.length > 0) btnCheck.classList.add('pulse');
+  else btnCheck.classList.remove('pulse');
 }
 
+// ═══════════════════ DRAG & DROP ═══════════════════
 function handleDragStart(e) {
   draggedLetter = e.target.dataset.letter;
   draggedLetterIndex = parseInt(e.target.dataset.index);
@@ -964,30 +1774,38 @@ function handleDragStart(e) {
 }
 function handleDragEnd(e) {
   e.target.classList.remove('dragging');
-  document.querySelectorAll('.letter-slot').forEach(s => s.classList.remove('drag-over'));
+  var allSlots = document.querySelectorAll('.letter-slot');
+  for (var i = 0; i < allSlots.length; i++) allSlots[i].classList.remove('drag-over');
 }
 function handleDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
-function handleDragEnter(e) { e.preventDefault(); e.target.closest('.letter-slot')?.classList.add('drag-over'); }
-function handleDragLeave(e) { e.target.closest('.letter-slot')?.classList.remove('drag-over'); }
+function handleDragEnter(e) {
+  e.preventDefault();
+  var slot = e.target.closest('.letter-slot');
+  if (slot) slot.classList.add('drag-over');
+}
+function handleDragLeave(e) {
+  var slot = e.target.closest('.letter-slot');
+  if (slot) slot.classList.remove('drag-over');
+}
 function handleDrop(e) {
   e.preventDefault();
-  const slot = e.target.closest('.letter-slot');
+  var slot = e.target.closest('.letter-slot');
   if (!slot) return;
   slot.classList.remove('drag-over');
-  const slotIndex = parseInt(slot.dataset.index);
+  var slotIndex = parseInt(slot.dataset.index);
   slotContents[slotIndex] = draggedLetterIndex;
   slot.textContent = draggedLetter.toUpperCase();
   slot.classList.add('filled');
-  slot.classList.remove('correct', 'incorrect'); 
+  slot.classList.remove('correct', 'incorrect');
   renderLetterPool();
   playSound('place');
 }
 
+// ═══════════════════ TOUCH DRAG ═══════════════════
 function handleTouchStart(e) {
-  // e.preventDefault(); // allow page scroll if not dragging a letter
-  const target = e.target.closest('.draggable-letter');
+  var target = e.target.closest('.draggable-letter');
   if (!target || target.classList.contains('used')) return;
-  e.preventDefault(); // Only prevent scroll if we actually grab a letter
+  e.preventDefault();
   touchSourceIndex = parseInt(target.dataset.index);
   touchDragElement = target.cloneNode(true);
   touchDragElement.className = 'draggable-letter touch-letter';
@@ -998,21 +1816,22 @@ function handleTouchStart(e) {
 }
 function handleTouchMove(e) {
   if (!touchDragElement) return;
-  e.preventDefault(); // Stop scrolling while dragging
-  const touch = e.touches[0];
+  e.preventDefault();
+  var touch = e.touches[0];
   moveTouchElement(touch);
-  const target = document.elementFromPoint(touch.clientX, touch.clientY);
-  const slot = target?.closest('.letter-slot');
-  document.querySelectorAll('.letter-slot').forEach(s => s.classList.remove('drag-over'));
+  var target = document.elementFromPoint(touch.clientX, touch.clientY);
+  var slot = target ? target.closest('.letter-slot') : null;
+  var allSlots = document.querySelectorAll('.letter-slot');
+  for (var i = 0; i < allSlots.length; i++) allSlots[i].classList.remove('drag-over');
   if (slot) slot.classList.add('drag-over');
 }
 function handleTouchEnd(e) {
   if (!touchDragElement) return;
-  const touch = e.changedTouches[0];
-  const target = document.elementFromPoint(touch.clientX, touch.clientY);
-  const slot = target?.closest('.letter-slot');
+  var touch = e.changedTouches[0];
+  var target = document.elementFromPoint(touch.clientX, touch.clientY);
+  var slot = target ? target.closest('.letter-slot') : null;
   if (slot) {
-    const slotIndex = parseInt(slot.dataset.index);
+    var slotIndex = parseInt(slot.dataset.index);
     slotContents[slotIndex] = touchSourceIndex;
     slot.textContent = shuffledLetters[touchSourceIndex].toUpperCase();
     slot.classList.add('filled');
@@ -1023,22 +1842,23 @@ function handleTouchEnd(e) {
   document.body.removeChild(touchDragElement);
   touchDragElement = null;
   touchSourceIndex = null;
-  document.querySelectorAll('.draggable-letter').forEach(l => l.classList.remove('dragging'));
-  document.querySelectorAll('.letter-slot').forEach(s => s.classList.remove('drag-over'));
+  var allLetters = document.querySelectorAll('.draggable-letter');
+  for (var i = 0; i < allLetters.length; i++) allLetters[i].classList.remove('dragging');
+  var allSlots = document.querySelectorAll('.letter-slot');
+  for (var j = 0; j < allSlots.length; j++) allSlots[j].classList.remove('drag-over');
 }
 function moveTouchElement(touch) {
-  // Center touch under finger roughly
   touchDragElement.style.left = (touch.clientX - 20) + 'px';
   touchDragElement.style.top = (touch.clientY - 25) + 'px';
 }
 function handleSlotTouchEnd(e) {
-  const slot = e.target.closest('.letter-slot');
+  var slot = e.target.closest('.letter-slot');
   if (slot) removeFromSlot(parseInt(slot.dataset.index));
 }
 function removeFromSlot(slotIndex) {
   if (slotContents[slotIndex] !== null) {
     slotContents[slotIndex] = null;
-    const slot = document.querySelectorAll('.letter-slot')[slotIndex];
+    var slot = document.querySelectorAll('.letter-slot')[slotIndex];
     slot.textContent = '';
     slot.classList.remove('filled', 'correct', 'incorrect');
     renderLetterPool();
@@ -1047,27 +1867,34 @@ function removeFromSlot(slotIndex) {
 }
 function clearSlots() {
   slotContents.fill(null);
-  document.querySelectorAll('.letter-slot').forEach(slot => {
-    slot.textContent = '';
-    slot.classList.remove('filled', 'correct', 'incorrect');
-  });
+  var allSlots = document.querySelectorAll('.letter-slot');
+  for (var i = 0; i < allSlots.length; i++) {
+    allSlots[i].textContent = '';
+    allSlots[i].classList.remove('filled', 'correct', 'incorrect');
+  }
   renderLetterPool();
   document.getElementById('spellingFeedback').textContent = '';
   playSound('pop');
 }
 function useHint() {
   if (hintsLeft <= 0) {
-    document.getElementById('spellingFeedback').textContent = "No hints left!";
+    document.getElementById('spellingFeedback').textContent = 'No hints left!';
     document.getElementById('spellingFeedback').className = 'feedback incorrect';
     return;
   }
-  const word = WORDS[currentSpellingIndex % WORDS.length].word.toLowerCase();
-  const slots = document.querySelectorAll('.letter-slot');
-  for (let i = 0; i < word.length; i++) {
-    const currentSlotContent = slotContents[i];
-    const currentLetter = currentSlotContent !== null ? shuffledLetters[currentSlotContent].toLowerCase() : null;
+  var word = activeWords[currentSpellingIndex % activeWords.length].word.toLowerCase();
+  var slots = document.querySelectorAll('.letter-slot');
+  for (var i = 0; i < word.length; i++) {
+    var currentSlotContent = slotContents[i];
+    var currentLetter = currentSlotContent !== null ? shuffledLetters[currentSlotContent].toLowerCase() : null;
     if (currentLetter !== word[i]) {
-      let poolIndexToUse = shuffledLetters.findIndex((l, idx) => l.toLowerCase() === word[i] && !slotContents.includes(idx));
+      var poolIndexToUse = -1;
+      for (var k = 0; k < shuffledLetters.length; k++) {
+        if (shuffledLetters[k].toLowerCase() === word[i] && slotContents.indexOf(k) === -1) {
+          poolIndexToUse = k;
+          break;
+        }
+      }
       if (poolIndexToUse !== -1) {
         slotContents[i] = poolIndexToUse;
         slots[i].textContent = word[i].toUpperCase();
@@ -1075,7 +1902,7 @@ function useHint() {
         renderLetterPool();
         hintsLeft--;
         document.getElementById('hints').textContent = hintsLeft;
-        document.getElementById('spellingFeedback').textContent = `Hint used!`;
+        document.getElementById('spellingFeedback').textContent = 'Hint used!';
         document.getElementById('spellingFeedback').className = 'feedback correct';
         playSound('hint');
         return;
@@ -1084,33 +1911,403 @@ function useHint() {
   }
 }
 
-function showVictory() {
+// ═══════════════════ BOSS BATTLE ═══════════════════
+function startBossBattle() {
+  gamePhase = 'boss';
+  bossHp = 100;
+  playerHeartsCount = 3;
+  bossRoundsPlayed = 0;
+  bossHeartsLost = 0;
+
+  document.body.classList.add('boss-mode');
+  document.getElementById('spellingCard').style.display = 'none';
+  document.getElementById('mathCard').style.display = 'none';
+  document.getElementById('bossCard').classList.add('show');
+
+  // Update progress bar
+  var bar = document.getElementById('progressBar');
+  bar.style.width = '100%';
+  bar.textContent = '\u2694\uFE0F BOSS';
+
+  // Reset boss HP bar
+  document.getElementById('bossHpBar').style.width = '100%';
+
+  // Reset hearts
+  var heartsEl = document.getElementById('playerHearts');
+  heartsEl.textContent = '';
+  for (var i = 0; i < 3; i++) {
+    var span = document.createElement('span');
+    span.className = 'heart';
+    span.textContent = '\u2764\uFE0F';
+    heartsEl.appendChild(span);
+  }
+
+  // Boss bear animation
+  var bear = document.getElementById('bossBear');
+  bear.className = 'boss-bear';
+  bear.offsetHeight;
+  bear.classList.add('idle');
+
+  document.getElementById('bossTimerFill').style.width = '100%';
+  document.getElementById('bossFeedback').textContent = '';
+
+  playSound('bossAppear');
+
+  // Restore question area structure (may have been replaced by "Try Again")
+  var qArea = document.getElementById('bossQuestionArea');
+  qArea.textContent = '';
+  var qContent = document.createElement('div');
+  qContent.id = 'bossQuestionContent';
+  qArea.appendChild(qContent);
+  var qOptions = document.createElement('div');
+  qOptions.className = 'boss-options';
+  qOptions.id = 'bossOptions';
+  qArea.appendChild(qOptions);
+
+  // Dramatic intro then start
+  qArea.style.opacity = '0';
+  setTimeout(function() {
+    qArea.style.opacity = '1';
+    loadBossQuestion();
+  }, 1500);
+}
+
+function loadBossQuestion() {
+  if (bossHp <= 0 || playerHeartsCount <= 0) return;
+
+  currentBossAnswer = null;
+  document.getElementById('bossFeedback').textContent = '';
+  document.getElementById('bossFeedback').className = 'feedback';
+
+  var isMath = Math.random() > 0.4;
+
+  if (isMath) {
+    loadBossMathQuestion();
+  } else {
+    loadBossSpellingQuestion();
+  }
+
+  startBossTimer();
+}
+
+function loadBossMathQuestion() {
+  var base = activeTimesTables[Math.floor(Math.random() * activeTimesTables.length)];
+  var multiplier = Math.floor(Math.random() * 12) + 1;
+  var answer = base * multiplier;
+  currentBossAnswer = answer;
+
+  var contentEl = document.getElementById('bossQuestionContent');
+  contentEl.textContent = '';
+  var eqDiv = document.createElement('div');
+  eqDiv.className = 'boss-math-equation';
+  eqDiv.textContent = base + ' \u00D7 ' + multiplier + ' = ?';
+  contentEl.appendChild(eqDiv);
+
+  var options = [answer];
+  while(options.length < 4) {
+    var wrong;
+    var t = Math.floor(Math.random() * 3);
+    if (t === 0) wrong = answer + base;
+    else if (t === 1) wrong = Math.max(0, answer - base);
+    else wrong = answer + (Math.random() > 0.5 ? 2 : -2);
+    if (options.indexOf(wrong) === -1 && wrong >= 0) options.push(wrong);
+  }
+  options = shuffleArray(options);
+
+  var optionsEl = document.getElementById('bossOptions');
+  optionsEl.textContent = '';
+  options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'boss-option-btn';
+    btn.textContent = opt;
+    btn.onclick = function() { handleBossAnswer(opt === answer, btn); };
+    optionsEl.appendChild(btn);
+  });
+}
+
+function loadBossSpellingQuestion() {
+  var wordData = activeWords[Math.floor(Math.random() * activeWords.length)];
+  var word = wordData.word.toLowerCase();
+
+  var contentEl = document.getElementById('bossQuestionContent');
+  contentEl.textContent = '';
+  var emojiDiv = document.createElement('div');
+  emojiDiv.className = 'boss-spelling-emoji';
+  emojiDiv.textContent = wordData.emoji;
+  contentEl.appendChild(emojiDiv);
+  var hintDiv = document.createElement('div');
+  hintDiv.className = 'boss-spelling-hint';
+  hintDiv.textContent = wordData.hint;
+  contentEl.appendChild(hintDiv);
+
+  // Create 4 options: correct word + 3 wrong
+  var options = [word];
+  var allWords = activeWords.map(function(w) { return w.word.toLowerCase(); });
+  var otherWords = allWords.filter(function(w) { return w !== word; });
+  var shuffledOthers = shuffleArray(otherWords);
+
+  for (var i = 0; i < Math.min(3, shuffledOthers.length); i++) {
+    options.push(shuffledOthers[i]);
+  }
+  while (options.length < 4) {
+    options.push(shuffleArray(word.split('')).join(''));
+  }
+  options = shuffleArray(options);
+  currentBossAnswer = word;
+
+  var optionsEl = document.getElementById('bossOptions');
+  optionsEl.textContent = '';
+  options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'boss-option-btn';
+    btn.textContent = opt.toUpperCase();
+    btn.onclick = function() { handleBossAnswer(opt === word, btn); };
+    optionsEl.appendChild(btn);
+  });
+}
+
+function startBossTimer() {
+  clearInterval(bossTimerInterval);
+  clearTimeout(bossTimerTimeout);
+
+  var timerFill = document.getElementById('bossTimerFill');
+  var timeLeft = 100;
+  timerFill.style.width = '100%';
+
+  bossTimerInterval = setInterval(function() {
+    timeLeft -= 1;
+    timerFill.style.width = timeLeft + '%';
+    if (timeLeft <= 0) {
+      clearInterval(bossTimerInterval);
+    }
+  }, 100);
+
+  bossTimerTimeout = setTimeout(function() {
+    clearInterval(bossTimerInterval);
+    handleBossAnswer(false, null);
+  }, 10000);
+}
+
+function handleBossAnswer(isCorrect, btnElement) {
+  clearInterval(bossTimerInterval);
+  clearTimeout(bossTimerTimeout);
+
+  var allBtns = document.querySelectorAll('.boss-option-btn');
+  for (var i = 0; i < allBtns.length; i++) allBtns[i].disabled = true;
+  bossRoundsPlayed++;
+  totalQuestions++;
+
+  if (isCorrect) {
+    if (btnElement) btnElement.classList.add('correct');
+    correctAnswers++;
+    streak++;
+    if (streak > maxStreak) maxStreak = streak;
+    var bonus = Math.max(0, (streak - 1) * 5);
+    score += 10 + bonus;
+    document.getElementById('score').textContent = score;
+
+    // Damage boss
+    bossHp -= 20;
+    document.getElementById('bossHpBar').style.width = Math.max(0, bossHp) + '%';
+
+    // Bear hit animation
+    var bear = document.getElementById('bossBear');
+    bear.classList.remove('idle', 'hit');
+    bear.offsetHeight;
+    bear.classList.add('hit');
+    setTimeout(function() { bear.classList.remove('hit'); bear.classList.add('idle'); }, 500);
+
+    document.getElementById('bossFeedback').textContent = '\uD83D\uDCA5 Direct hit!';
+    document.getElementById('bossFeedback').className = 'feedback correct';
+    playSound('bossHit');
+
+    if (bossHp <= 0) {
+      setTimeout(bossDefeated, 800);
+      return;
+    }
+  } else {
+    if (btnElement) btnElement.classList.add('incorrect');
+    streak = 0;
+    bossHeartsLost++;
+    playerHeartsCount--;
+
+    // Show correct answer
+    for (var j = 0; j < allBtns.length; j++) {
+      var val = allBtns[j].textContent;
+      if (typeof currentBossAnswer === 'number' && parseInt(val) === currentBossAnswer) allBtns[j].classList.add('correct');
+      else if (typeof currentBossAnswer === 'string' && val.toLowerCase() === currentBossAnswer) allBtns[j].classList.add('correct');
+    }
+
+    // Bear attack animation
+    var bear2 = document.getElementById('bossBear');
+    bear2.classList.remove('idle', 'attack');
+    bear2.offsetHeight;
+    bear2.classList.add('attack');
+    setTimeout(function() { bear2.classList.remove('attack'); bear2.classList.add('idle'); }, 600);
+
+    // Screen shake
+    var arena = document.getElementById('bossArena');
+    arena.classList.add('screen-shake');
+    setTimeout(function() { arena.classList.remove('screen-shake'); }, 400);
+
+    // Lose heart
+    var hearts = document.querySelectorAll('#playerHearts .heart');
+    var heartToLose = hearts[playerHeartsCount]; // Already decremented
+    if (heartToLose) {
+      heartToLose.classList.add('breaking');
+      setTimeout(function() { heartToLose.classList.add('lost'); }, 500);
+    }
+
+    document.getElementById('bossFeedback').textContent = '\uD83D\uDD25 Bear attacks!';
+    document.getElementById('bossFeedback').className = 'feedback incorrect';
+    playSound('bossAttack');
+
+    if (playerHeartsCount <= 0) {
+      setTimeout(bossPlayerLost, 1000);
+      return;
+    }
+  }
+
+  updateStreakUI();
+  setTimeout(loadBossQuestion, 1500);
+}
+
+function bossDefeated() {
+  var bear = document.getElementById('bossBear');
+  bear.classList.remove('idle', 'hit');
+  bear.classList.add('defeated');
+  playSound('bossDefeat');
+  createSparkles(document.getElementById('bossArena'));
+
+  document.getElementById('bossFeedback').textContent = '\uD83C\uDF89 YOU DEFEATED THE BEAR!';
+  document.getElementById('bossFeedback').className = 'feedback correct';
+  document.getElementById('bossFeedback').style.fontSize = '1.4em';
+
+  setTimeout(function() {
+    document.getElementById('bossFeedback').style.fontSize = '';
+    showVictory(true);
+  }, 2500);
+}
+
+function bossPlayerLost() {
+  document.getElementById('bossFeedback').textContent = '\uD83D\uDC94 The bear wins this time...';
+  document.getElementById('bossFeedback').className = 'feedback incorrect';
+
+  var qArea = document.getElementById('bossQuestionArea');
+  qArea.textContent = '';
+  var wrapper = document.createElement('div');
+  wrapper.style.textAlign = 'center';
+  wrapper.style.padding = '20px';
+  var msg = document.createElement('p');
+  msg.style.fontFamily = "'Fredoka One', cursive";
+  msg.style.fontSize = '1.3em';
+  msg.style.color = '#2c3e50';
+  msg.style.marginBottom = '15px';
+  msg.textContent = "Don't give up!";
+  wrapper.appendChild(msg);
+  var retryBtn = document.createElement('button');
+  retryBtn.className = 'btn btn-play';
+  retryBtn.style.display = 'inline-flex';
+  retryBtn.textContent = '\uD83D\uDD04 Try Again!';
+  retryBtn.onclick = startBossBattle;
+  wrapper.appendChild(retryBtn);
+  qArea.appendChild(wrapper);
+}
+
+// ═══════════════════ VICTORY & KOALI POUNDS ═══════════════════
+function calculateKoaliPounds(bossBeaten) {
+  var pounds = 0;
+
+  // 1 pound: Completed the game (beat boss)
+  if (bossBeaten) pounds++;
+
+  // 1 pound: Accuracy >= 70%
+  var accuracy = totalQuestions > 0 ? correctAnswers / totalQuestions : 0;
+  if (accuracy >= 0.7) pounds++;
+
+  // 1 pound: Accuracy >= 90%
+  if (accuracy >= 0.9) pounds++;
+
+  // 1 pound: Max streak >= 5
+  if (maxStreak >= 5) pounds++;
+
+  // 1 pound: Beat boss without losing a heart
+  if (bossBeaten && bossHeartsLost === 0) pounds++;
+
+  return Math.min(5, pounds);
+}
+
+function showVictory(bossBeaten) {
+  gamePhase = 'victory';
+  document.body.classList.remove('boss-mode');
+  document.getElementById('bossCard').classList.remove('show');
+
+  var earnedPounds = calculateKoaliPounds(bossBeaten);
+  var currentTotal = loadTotalPounds();
+  var newTotal = currentTotal + earnedPounds;
+  saveTotalPounds(newTotal);
+
   document.getElementById('finalScore').textContent = score;
+
+  if (bossBeaten) {
+    document.getElementById('victoryTitle').textContent = 'AMAZING!';
+    document.getElementById('victoryMessage').textContent = 'You spelled the words, did the math, AND defeated the bear! Koali is SO proud!';
+  } else {
+    document.getElementById('victoryTitle').textContent = 'WELL DONE!';
+    document.getElementById('victoryMessage').textContent = 'You completed all the challenges! Koali is proud!';
+  }
+
+  // Render pound coins
+  var coinsEl = document.getElementById('poundsCoins');
+  coinsEl.textContent = '';
+  for (var i = 0; i < 5; i++) {
+    var coin = document.createElement('div');
+    coin.className = 'pound-coin' + (i >= earnedPounds ? ' empty' : '');
+    coin.textContent = '\u00A3';
+    coinsEl.appendChild(coin);
+
+    // Staggered reveal
+    (function(coinEl, idx, earned) {
+      if (idx < earned) {
+        setTimeout(function() { coinEl.classList.add('show'); playSound('coin'); }, 500 + idx * 400);
+      } else {
+        setTimeout(function() { coinEl.classList.add('show'); }, 500 + idx * 400);
+      }
+    })(coin, i, earnedPounds);
+  }
+
+  document.getElementById('poundsTotal').textContent = 'Lifetime Total: ' + newTotal + ' \uD83E\uDE99';
+
   document.getElementById('victoryOverlay').classList.add('show');
   createConfetti();
   playSound('victory');
 }
 
+// ═══════════════════ EFFECTS ═══════════════════
 function createConfetti() {
-  const colors = ['#f1c40f', '#e67e22', '#2ecc71', '#3498db', '#9b59b6'];
-  for (let i = 0; i < 60; i++) {
-    setTimeout(() => {
-      const conf = document.createElement('div');
-      conf.className = 'confetti';
-      conf.style.left = Math.random() * 100 + 'vw';
-      conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      conf.style.width = (Math.random() * 10 + 5) + 'px';
-      conf.style.height = (Math.random() * 10 + 5) + 'px';
-      conf.style.animationDuration = (Math.random() * 3 + 2) + 's';
-      document.body.appendChild(conf);
-    }, i * 30);
+  var colors = ['#f1c40f', '#e67e22', '#2ecc71', '#3498db', '#9b59b6', '#e74c3c', '#1abc9c'];
+  for (var i = 0; i < 60; i++) {
+    (function(idx) {
+      setTimeout(function() {
+        var conf = document.createElement('div');
+        conf.className = 'confetti';
+        conf.style.left = Math.random() * 100 + 'vw';
+        conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        conf.style.width = (Math.random() * 10 + 5) + 'px';
+        conf.style.height = (Math.random() * 10 + 5) + 'px';
+        conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        conf.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        document.body.appendChild(conf);
+        setTimeout(function() { conf.remove(); }, 5000);
+      }, idx * 30);
+    })(i);
   }
 }
 
 function createSparkles(container) {
-  for (let i = 0; i < 10; i++) {
-    const s = document.createElement('div');
-    s.textContent = '✨';
+  for (var i = 0; i < 10; i++) {
+    var s = document.createElement('div');
+    s.textContent = '\u2728';
     s.style.position = 'absolute';
     s.style.left = (Math.random() * 80 + 10) + '%';
     s.style.top = (Math.random() * 80 + 10) + '%';
@@ -1118,63 +2315,249 @@ function createSparkles(container) {
     s.style.transition = 'all 1s ease';
     s.style.pointerEvents = 'none';
     container.appendChild(s);
-    setTimeout(() => { s.style.transform = `translateY(-50px) scale(0)`; s.style.opacity = 0; }, 50);
-    setTimeout(() => s.remove(), 1000);
+    (function(el) {
+      setTimeout(function() { el.style.transform = 'translateY(-50px) scale(0)'; el.style.opacity = '0'; }, 50);
+      setTimeout(function() { el.remove(); }, 1000);
+    })(s);
   }
 }
 
-function restartGame() {
-  currentRoundCount = 0;
-  currentSpellingIndex = 0;
-  score = 0;
-  streak = 0;
-  hintsLeft = 3;
-  document.getElementById('hints').textContent = 3;
-  document.getElementById('victoryOverlay').classList.remove('show');
-  loadChallenge();
+// ═══════════════════ SETTINGS ═══════════════════
+function openSettings() {
+  renderWordEditor();
+  renderTimesTableGrid();
+  document.getElementById('settingsOverlay').classList.add('show');
+  playSound('pop');
 }
 
-const AudioContext = window.AudioContext || window.webkitAudioContext;
-const audioCtx = new AudioContext();
+function closeSettings() {
+  // Save words from editor
+  var rows = document.querySelectorAll('.word-row');
+  var words = [];
+  for (var i = 0; i < rows.length; i++) {
+    var emoji = rows[i].querySelector('.emoji-input').value.trim() || '\u2753';
+    var word = rows[i].querySelector('.word-input').value.trim().toLowerCase();
+    var hint = rows[i].querySelector('.hint-input').value.trim() || 'Spell this word!';
+    if (word.length > 0) {
+      words.push({ word: word, emoji: emoji, hint: hint });
+    }
+  }
 
+  if (words.length === 0) {
+    alert('You need at least one word!');
+    return;
+  }
+  saveWords(words);
+  activeWords = words;
+
+  // Save times tables
+  var activeTables = [];
+  var toggles = document.querySelectorAll('.tt-toggle.active');
+  for (var j = 0; j < toggles.length; j++) {
+    activeTables.push(parseInt(toggles[j].dataset.table));
+  }
+  if (activeTables.length === 0) {
+    alert('You need at least one times table!');
+    return;
+  }
+  saveTimesTables(activeTables);
+  activeTimesTables = activeTables;
+
+  TOTAL_ROUNDS = activeWords.length * 2;
+  document.getElementById('settingsOverlay').classList.remove('show');
+  playSound('correct');
+}
+
+function renderWordEditor() {
+  var container = document.getElementById('wordListEditor');
+  var words = loadWords();
+  container.textContent = '';
+  words.forEach(function(w, i) {
+    container.appendChild(createWordRow(w.emoji, w.word, w.hint));
+  });
+}
+
+function createWordRow(emoji, word, hint) {
+  var row = document.createElement('div');
+  row.className = 'word-row';
+
+  var emojiInput = document.createElement('input');
+  emojiInput.type = 'text';
+  emojiInput.className = 'emoji-input';
+  emojiInput.value = emoji;
+  emojiInput.placeholder = '\uD83C\uDFAE';
+  emojiInput.maxLength = 4;
+
+  var wordInput = document.createElement('input');
+  wordInput.type = 'text';
+  wordInput.className = 'word-input';
+  wordInput.value = word;
+  wordInput.placeholder = 'word';
+
+  var hintInput = document.createElement('input');
+  hintInput.type = 'text';
+  hintInput.className = 'hint-input';
+  hintInput.value = hint;
+  hintInput.placeholder = 'Hint for the word';
+
+  var deleteBtn = document.createElement('button');
+  deleteBtn.className = 'btn-delete-word';
+  deleteBtn.textContent = '\u2715';
+  deleteBtn.onclick = function() { row.remove(); };
+
+  row.appendChild(emojiInput);
+  row.appendChild(wordInput);
+  row.appendChild(hintInput);
+  row.appendChild(deleteBtn);
+
+  return row;
+}
+
+function addWordRow() {
+  var container = document.getElementById('wordListEditor');
+  container.appendChild(createWordRow('\u2753', '', ''));
+  container.lastElementChild.scrollIntoView({ behavior: 'smooth' });
+  playSound('pop');
+}
+
+function resetWordsToDefault() {
+  localStorage.removeItem('koali_customWords');
+  renderWordEditor();
+  playSound('pop');
+}
+
+function renderTimesTableGrid() {
+  var grid = document.getElementById('timesTableGrid');
+  var active = loadTimesTables();
+  grid.textContent = '';
+  for (var i = 2; i <= 12; i++) {
+    var btn = document.createElement('button');
+    btn.className = 'tt-toggle' + (active.indexOf(i) !== -1 ? ' active' : '');
+    btn.textContent = '\u00D7' + i;
+    btn.dataset.table = i;
+    (function(b) {
+      b.onclick = function() {
+        b.classList.toggle('active');
+        playSound('pop');
+      };
+    })(btn);
+    grid.appendChild(btn);
+  }
+}
+
+// ═══════════════════ SOUNDS ═══════════════════
 function playSound(type) {
   if (audioCtx.state === 'suspended') audioCtx.resume();
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.connect(gain); gain.connect(audioCtx.destination);
-  const now = audioCtx.currentTime;
-  
+  var now = audioCtx.currentTime;
+  var osc, gain, osc2, gain2;
+
   if (type === 'pop') {
+    osc = audioCtx.createOscillator();
+    gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
     osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(600, now + 0.1);
     gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
     osc.start(now); osc.stop(now + 0.1);
   } else if (type === 'place') {
+    osc = audioCtx.createOscillator();
+    gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
     osc.frequency.setValueAtTime(300, now);
     gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
     osc.start(now); osc.stop(now + 0.1);
   } else if (type === 'correct') {
+    osc = audioCtx.createOscillator();
+    gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
     osc.type = 'triangle';
     osc.frequency.setValueAtTime(523.25, now); osc.frequency.setValueAtTime(659.25, now + 0.1); osc.frequency.setValueAtTime(783.99, now + 0.2);
     gain.gain.setValueAtTime(0.1, now); gain.gain.linearRampToValueAtTime(0, now + 0.4);
     osc.start(now); osc.stop(now + 0.4);
   } else if (type === 'wrong') {
+    osc = audioCtx.createOscillator();
+    gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
     osc.type = 'sawtooth';
     osc.frequency.setValueAtTime(200, now); osc.frequency.linearRampToValueAtTime(150, now + 0.3);
     gain.gain.setValueAtTime(0.1, now); gain.gain.linearRampToValueAtTime(0, now + 0.3);
     osc.start(now); osc.stop(now + 0.3);
+  } else if (type === 'hint') {
+    osc = audioCtx.createOscillator();
+    gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(600, now); osc.frequency.setValueAtTime(800, now + 0.15);
+    gain.gain.setValueAtTime(0.08, now); gain.gain.linearRampToValueAtTime(0, now + 0.3);
+    osc.start(now); osc.stop(now + 0.3);
   } else if (type === 'victory') {
-    [523, 659, 784, 1046].forEach((freq, i) => {
-      const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+    [523, 659, 784, 1046].forEach(function(freq, i) {
+      var o = audioCtx.createOscillator(); var g = audioCtx.createGain();
       o.connect(g); g.connect(audioCtx.destination);
+      o.type = 'triangle';
       o.frequency.value = freq;
       g.gain.setValueAtTime(0.05, now + i*0.1); g.gain.exponentialRampToValueAtTime(0.001, now + i*0.1 + 0.4);
       o.start(now + i*0.1); o.stop(now + i*0.1 + 0.4);
     });
+  } else if (type === 'coin') {
+    osc = audioCtx.createOscillator();
+    gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1200, now); osc.frequency.setValueAtTime(1600, now + 0.05); osc.frequency.setValueAtTime(2000, now + 0.1);
+    gain.gain.setValueAtTime(0.08, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+    osc.start(now); osc.stop(now + 0.25);
+  } else if (type === 'bossAppear') {
+    osc = audioCtx.createOscillator();
+    gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(150, now); osc.frequency.exponentialRampToValueAtTime(40, now + 1.5);
+    gain.gain.setValueAtTime(0.08, now); gain.gain.linearRampToValueAtTime(0, now + 1.5);
+    osc.start(now); osc.stop(now + 1.5);
+    osc2 = audioCtx.createOscillator();
+    gain2 = audioCtx.createGain();
+    osc2.connect(gain2); gain2.connect(audioCtx.destination);
+    osc2.type = 'square';
+    osc2.frequency.setValueAtTime(55, now);
+    gain2.gain.setValueAtTime(0.04, now); gain2.gain.linearRampToValueAtTime(0, now + 1.2);
+    osc2.start(now); osc2.stop(now + 1.2);
+  } else if (type === 'bossHit') {
+    osc = audioCtx.createOscillator();
+    gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(200, now); osc.frequency.exponentialRampToValueAtTime(80, now + 0.15);
+    gain.gain.setValueAtTime(0.12, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+    osc.start(now); osc.stop(now + 0.2);
+    osc2 = audioCtx.createOscillator();
+    gain2 = audioCtx.createGain();
+    osc2.connect(gain2); gain2.connect(audioCtx.destination);
+    osc2.type = 'triangle';
+    osc2.frequency.setValueAtTime(800, now); osc2.frequency.exponentialRampToValueAtTime(400, now + 0.1);
+    gain2.gain.setValueAtTime(0.08, now); gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+    osc2.start(now); osc2.stop(now + 0.15);
+  } else if (type === 'bossAttack') {
+    osc = audioCtx.createOscillator();
+    gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(100, now + 0.4);
+    gain.gain.setValueAtTime(0.1, now); gain.gain.linearRampToValueAtTime(0, now + 0.4);
+    osc.start(now); osc.stop(now + 0.4);
+  } else if (type === 'bossDefeat') {
+    [262, 330, 392, 523, 659, 784].forEach(function(freq, i) {
+      var o = audioCtx.createOscillator(); var g = audioCtx.createGain();
+      o.connect(g); g.connect(audioCtx.destination);
+      o.type = 'triangle';
+      o.frequency.value = freq;
+      g.gain.setValueAtTime(0.06, now + i*0.12); g.gain.exponentialRampToValueAtTime(0.001, now + i*0.12 + 0.5);
+      o.start(now + i*0.12); o.stop(now + i*0.12 + 0.5);
+    });
   }
 }
 
-createLeaves();
-loadChallenge();
+// ═══════════════════ START ═══════════════════
+init();
 </script>
 </body>
 </html>

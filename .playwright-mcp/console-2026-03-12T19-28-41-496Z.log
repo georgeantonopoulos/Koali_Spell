@@ -1,0 +1,4 @@
+[  111328ms] TypeError: Cannot set properties of null (setting 'textContent')
+    at loadBossMathQuestion (http://localhost:8765/:1988:25)
+    at loadBossQuestion (http://localhost:8765/:1973:5)
+    at http://localhost:8765/:1959:5
