@@ -428,7 +428,7 @@
     justify-content: center;
     font-family: 'Fredoka One', cursive;
     font-size: 1.5em;
-    cursor: grab;
+    cursor: pointer;
     user-select: none;
     transition: all 0.2s ease;
     box-shadow: 0 4px 0 #117a65, 0 6px 15px rgba(0,0,0,0.1);
@@ -436,7 +436,7 @@
     touch-action: none;
   }
 
-  .draggable-letter:hover { transform: translateY(-3px); box-shadow: 0 7px 0 #117a65, 0 9px 20px rgba(0,0,0,0.12); }
+  .draggable-letter:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 0 #117a65, 0 9px 20px rgba(0,0,0,0.12); }
   .draggable-letter:active { cursor: grabbing; transform: translateY(2px); box-shadow: 0 1px 0 #117a65; }
   .draggable-letter.used { opacity: 0.25; pointer-events: none; transform: scale(0.85); box-shadow: none; background: #bdc3c7; }
   .dragging { opacity: 0.6; transform: scale(1.2) rotate(5deg); }
@@ -1321,17 +1321,16 @@
 <script>
 // ═══════════════════ DEFAULT DATA ═══════════════════
 const DEFAULT_WORDS = [
-  { word: "play", emoji: "🎮", hint: "Having fun with games or toys" },
-  { word: "well", emoji: "👍", hint: "Doing something in a good way" },
-  { word: "just", emoji: "⚖️", hint: "Only, or fair and right" },
-  { word: "saw", emoji: "👀", hint: "Used your eyes in the past" },
-  { word: "rude", emoji: "😠", hint: "Not being polite" },
-  { word: "prune", emoji: "🫐", hint: "A dried plum" },
-  { word: "flute", emoji: "🪈", hint: "A musical instrument you blow into" },
-  { word: "grew", emoji: "🌱", hint: "Got bigger in the past" },
-  { word: "chew", emoji: "🦷", hint: "Biting food before swallowing" },
-  { word: "boot", emoji: "👢", hint: "A tall shoe for rain or snow" },
-  { word: "zoom", emoji: "🏎️", hint: "To move really, really fast!" }
+  { word: "much", emoji: "🔢", hint: "A lot of something" },
+  { word: "rain", emoji: "🌧️", hint: "Water falling from the clouds" },
+  { word: "new", emoji: "✨", hint: "Not old, just arrived" },
+  { word: "girl", emoji: "👧", hint: "A young female person" },
+  { word: "after", emoji: "⏩", hint: "Coming next, following something" },
+  { word: "alert", emoji: "🔔", hint: "Paying attention, being watchful" },
+  { word: "dirty", emoji: "🤎", hint: "Not clean, covered in mud" },
+  { word: "thirty", emoji: "3️⃣", hint: "The number 30" },
+  { word: "burst", emoji: "💥", hint: "To pop or explode suddenly" },
+  { word: "church", emoji: "⛪", hint: "A building where people pray" }
 ];
 
 const DEFAULT_TABLES = [4, 9];
@@ -1749,6 +1748,9 @@ function renderLetterPool() {
     el.dataset.letter = letter;
     if (slotContents.indexOf(index) !== -1) el.classList.add('used');
 
+    el.addEventListener('click', (function(idx, ltr) {
+      return function() { handleLetterTap(idx, ltr); };
+    })(index, letter));
     el.addEventListener('dragstart', handleDragStart);
     el.addEventListener('dragend', handleDragEnd);
     el.addEventListener('touchstart', handleTouchStart, { passive: false });
@@ -1762,6 +1764,29 @@ function renderLetterPool() {
   var btnCheck = document.getElementById('btnCheck');
   if (allFilled && slotContents.length > 0) btnCheck.classList.add('pulse');
   else btnCheck.classList.remove('pulse');
+}
+
+// ═══════════════════ TAP TO PLACE ═══════════════════
+function handleLetterTap(letterIndex, letter) {
+  // If this letter is already placed in a slot, remove it
+  var existingSlot = slotContents.indexOf(letterIndex);
+  if (existingSlot !== -1) {
+    removeFromSlot(existingSlot);
+    return;
+  }
+  // Find the first empty slot
+  var emptySlot = -1;
+  for (var i = 0; i < slotContents.length; i++) {
+    if (slotContents[i] === null) { emptySlot = i; break; }
+  }
+  if (emptySlot === -1) return; // All slots full
+  slotContents[emptySlot] = letterIndex;
+  var slotEl = document.querySelectorAll('.letter-slot')[emptySlot];
+  slotEl.textContent = letter.toUpperCase();
+  slotEl.classList.add('filled');
+  slotEl.classList.remove('correct', 'incorrect');
+  renderLetterPool();
+  playSound('place');
 }
 
 // ═══════════════════ DRAG & DROP ═══════════════════
