@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🐨 Koali's Spell & Math Adventure</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap');
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    /* Prevent pull-to-refresh on mobile */
+    overscroll-behavior-y: contain; 
+  }
+
+  .leaves {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .leaf {
+    position: absolute;
+    font-size: 20px;
+    animation: float 15s infinite linear;
+    opacity: 0.3;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  @keyframes float {
+    0% { transform: translateY(-10vh) rotate(0deg); }
+    100% { transform: translateY(110vh) rotate(360deg); }
+  }
+
+  .game-container {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .header h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5em;
+    color: #fff;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+    margin-bottom: 5px;
+  }
+
+  .header p {
+    color: #d1f2eb;
+    font-size: 1.1em;
+    font-weight: 700;
+  }
+
+  .mascot-container {
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .mascot {
+    font-size: 75px;
+    display: block;
+    animation: koalaSway 3s infinite ease-in-out;
+    transform-origin: bottom center;
+  }
+
+  @keyframes koalaSway {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+  }
+
+  .mascot.cheer {
+    animation: koalaCheer 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes koalaCheer {
+    0% { transform: scale(1) translateY(0) rotate(0); }
+    25% { transform: scale(1.3) translateY(-30px) rotate(-15deg); }
+    50% { transform: scale(1.3) translateY(-30px) rotate(15deg); }
+    75% { transform: scale(1.2) translateY(-15px) rotate(-5deg); }
+    100% { transform: scale(1) translateY(0) rotate(0); }
+  }
+
+  .progress-bar-container {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 25px;
+    padding: 5px;
+    margin: 10px 0;
+    position: relative;
+  }
+
+  .progress-bar {
+    height: 25px;
+    background: linear-gradient(90deg, #11998e, #38ef7d);
+    border-radius: 20px;
+    transition: width 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 800;
+    font-size: 0.85em;
+    min-width: 40px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  }
+
+  .score-board {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 5px 0 15px;
+    flex-wrap: wrap;
+  }
+
+  .score-item {
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(5px);
+    padding: 6px 15px;
+    border-radius: 20px;
+    color: white;
+    font-weight: 700;
+    font-size: 1em;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .game-card {
+    background: white;
+    border-radius: 30px;
+    padding: 25px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    border: 4px solid #fff;
+    animation: slideIn 0.5s ease;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .word-image-container {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .word-image {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #e8f3f1, #dbece9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    border: 4px solid #a8e6cf;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .word-hint {
+    font-size: 1.1em;
+    color: #2c3e50;
+    margin-top: 10px;
+    font-weight: 700;
+  }
+
+  .slots-container {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+    min-height: 55px;
+  }
+
+  .letter-slot {
+    width: 50px;
+    height: 55px;
+    border: 3px dashed #bdc3c7;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.6em;
+    color: #2c3e50;
+    background: #f7f9f9;
+    transition: all 0.2s ease;
+  }
+
+  .letter-slot.drag-over {
+    border-color: #38ef7d;
+    background: #eafaf1;
+    transform: scale(1.1);
+  }
+
+  .letter-slot.filled {
+    border-style: solid;
+    border-color: #2c3e50;
+    background: linear-gradient(135deg, #fff, #f0f3f4);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    animation: popIn 0.3s ease;
+    cursor: pointer;
+  }
+
+  .letter-slot.correct {
+    border-color: #27ae60;
+    background: linear-gradient(135deg, #d5f5e3, #abebc6);
+    color: #1e8449;
+    animation: correctPop 0.5s ease;
+  }
+
+  .letter-slot.incorrect {
+    border-color: #e74c3c;
+    background: linear-gradient(135deg, #fadbd8, #f5b7b1);
+    color: #c0392b;
+    animation: shake 0.5s ease;
+  }
+
+  @keyframes popIn {
+    0% { transform: scale(0.5); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes correctPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2) rotate(5deg); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  .letters-pool {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 10px 0;
+    min-height: 60px;
+    padding: 15px;
+    background: rgba(46, 204, 113, 0.1);
+    border-radius: 15px;
+  }
+
+  .draggable-letter {
+    width: 45px;
+    height: 50px;
+    background: linear-gradient(135deg, #1abc9c, #16a085);
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.5em;
+    cursor: grab;
+    user-select: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 0 #117a65;
+    position: relative;
+    touch-action: none; /* Crucial for reliable touch dragging */
+  }
+
+  .draggable-letter:hover { transform: translateY(-2px); }
+  .draggable-letter:active { cursor: grabbing; transform: translateY(2px); box-shadow: 0 0 0 #117a65; }
+  .draggable-letter.used { opacity: 0.3; pointer-events: none; transform: scale(0.9); box-shadow: none; background: #bdc3c7; }
+  .dragging { opacity: 0.6; transform: scale(1.2) rotate(5deg); }
+
+  .btn-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: white;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+  }
+
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  .btn:active { transform: translateY(1px); }
+
+  .btn-check { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+  .btn-skip { background: linear-gradient(135deg, #f39c12, #f1c40f); }
+  .btn-clear { background: linear-gradient(135deg, #c0392b, #e74c3c); }
+  .btn-hint { background: linear-gradient(135deg, #2980b9, #3498db); }
+  
+  .btn-play { background: linear-gradient(135deg, #8e44ad, #9b59b6); font-size: 1.3em; padding: 12px 30px; margin-top: 15px; }
+
+  .feedback {
+    text-align: center;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.2em;
+    margin: 5px 0;
+    min-height: 30px;
+    transition: all 0.3s ease;
+  }
+
+  .feedback.correct { color: #27ae60; }
+  .feedback.incorrect { color: #c0392b; }
+
+  /* Math Section Styles */
+  .math-equation {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3.5em;
+    text-align: center;
+    color: #2c3e50;
+    margin: 15px 0;
+    text-shadow: 2px 2px 0px #e8f3f1;
+  }
+
+  .math-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    max-width: 350px;
+    margin: 0 auto 15px auto;
+  }
+
+  .math-btn {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    font-size: 1.8em;
+    padding: 15px;
+    justify-content: center;
+    border-radius: 15px;
+    box-shadow: 0 5px 0 #1f618d;
+  }
+
+  .math-btn:active { box-shadow: 0 0 0 #1f618d; transform: translateY(5px); }
+  .math-btn.correct { background: linear-gradient(135deg, #27ae60, #2ecc71); box-shadow: 0 5px 0 #1e8449; }
+  .math-btn.incorrect { background: linear-gradient(135deg, #e74c3c, #c0392b); box-shadow: 0 5px 0 #922b21; }
+
+  .victory-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.5s ease;
+  }
+  .victory-overlay.show { display: flex; }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .victory-content {
+    text-align: center;
+    background: white;
+    padding: 30px;
+    border-radius: 25px;
+    max-width: 90%;
+    animation: victoryPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes victoryPop {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .koala-hug { font-size: 80px; display: block; margin-bottom: 5px; animation: hug 1.5s infinite alternate; }
+  @keyframes hug { from { transform: scale(1); } to { transform: scale(1.1); } }
+
+  .hug-text { font-family: 'Fredoka One', cursive; color: #2c3e50; font-size: 1.8em; margin: 10px 0; }
+
+  .confetti { position: fixed; top: -10px; z-index: 1001; pointer-events: none; animation: confettiFall linear forwards; }
+  @keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+
+  .round-counter {
+    font-family: 'Nunito', sans-serif;
+    color: #7f8c8d;
+    text-align: center;
+    font-size: 0.8em;
+    font-weight: 800;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .streak-display { text-align: center; font-size: 1.2em; min-height: 25px; margin-bottom: 2px; }
+  .touch-letter { position: fixed; z-index: 9999; pointer-events: none; opacity: 0.9; transform: scale(1.2); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+
+  /* 📱 MOBILE SQUASH STYLES 📱 */
+  @media (max-width: 600px) {
+    .game-container {
+      padding: 8px; /* Tighter container */
+    }
+
+    .header {
+      margin-bottom: 5px; /* Pull it up */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px; /* Put Koala NEXT to the title! */
+    }
+
+    .header-text {
+      text-align: left;
+    }
+
+    .mascot {
+      font-size: 45px; /* Smaller Koala */
+    }
+
+    .header h1 { 
+      font-size: 1.6em; 
+      margin-bottom: 0px;
+    }
+
+    .header p {
+      font-size: 0.85em; /* Smaller subtitle */
+    }
+
+    .score-board {
+      margin: 2px 0 8px;
+      gap: 8px;
+    }
+
+    .score-item {
+      padding: 4px 10px;
+      font-size: 0.85em;
+    }
+
+    .progress-bar-container {
+      margin: 5px 0;
+    }
+
+    .progress-bar {
+      height: 20px;
+      font-size: 0.75em;
+    }
+
+    .game-card {
+      padding: 12px;
+      border-radius: 20px;
+      margin-bottom: 5px;
+    }
+
+    .word-image-container {
+      margin-bottom: 5px;
+    }
+
+    .word-image { 
+      width: 75px; 
+      height: 75px; 
+      font-size: 38px; 
+      border-width: 3px;
+    }
+
+    .word-hint {
+      margin-top: 5px;
+      font-size: 0.9em;
+    }
+
+    .slots-container {
+      margin: 8px 0;
+      min-height: 42px;
+      gap: 4px;
+    }
+
+    .letter-slot { 
+      width: 35px; 
+      height: 40px; 
+      font-size: 1.3em; 
+      border-radius: 8px;
+    }
+
+    .letters-pool {
+      margin: 5px 0;
+      padding: 8px;
+      min-height: 50px;
+      gap: 5px;
+      border-radius: 10px;
+    }
+
+    .draggable-letter { 
+      width: 35px; 
+      height: 40px; 
+      font-size: 1.3em; 
+      border-radius: 8px;
+      box-shadow: 0 2px 0 #117a65;
+    }
+
+    .btn-container {
+      margin-top: 5px;
+      gap: 5px;
+    }
+
+    .btn { 
+      padding: 8px 12px; 
+      font-size: 0.85em; 
+      border-radius: 8px;
+    }
+
+    .feedback {
+      margin: 2px 0;
+      font-size: 1em;
+      min-height: 25px;
+    }
+
+    /* Math tweaks for mobile */
+    .math-equation { 
+      font-size: 2.8em; 
+      margin: 10px 0;
+    }
+
+    .math-options {
+      gap: 10px;
+      margin-bottom: 10px;
+      max-width: 280px;
+    }
+
+    .math-btn { 
+      font-size: 1.4em; 
+      padding: 12px; 
+      border-radius: 12px;
+      box-shadow: 0 4px 0 #1f618d;
+    }
+    
+    .math-btn:active {
+        box-shadow: 0 0 0 #1f618d;
+        transform: translateY(4px);
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="leaves" id="leaves"></div>
+
+<div class="game-container">
+  <div class="header">
+    <div class="mascot-container" onclick="koaliCheer()">
+      <span class="mascot" id="mascot">🐨</span>
+    </div>
+    <div class="header-text">
+      <h1>Koali's Adventure</h1>
+      <p>Spell & Math Time!</p>
+    </div>
+  </div>
+
+  <div class="score-board">
+    <div class="score-item">⭐ <span id="score">0</span></div>
+    <div class="score-item">🌿 <span id="streak">0</span></div>
+    <div class="score-item">💡 <span id="hints">3</span></div>
+  </div>
+
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar" style="width: 0%;">0 / 22</div>
+  </div>
+
+  <!-- SPELLING CARD -->
+  <div class="game-card" id="spellingCard">
+    <div class="round-counter" id="spellingCounter">Round 1 of 22 (Spelling)</div>
+
+    <div class="word-image-container">
+      <div class="word-image" id="wordImage">?</div>
+      <div class="word-hint" id="wordHint">...</div>
+    </div>
+
+    <div class="slots-container" id="slotsContainer"></div>
+    <div class="streak-display" id="spellingStreakDisplay"></div>
+    <div class="letters-pool" id="lettersPool"></div>
+    <div class="feedback" id="spellingFeedback"></div>
+
+    <div class="btn-container">
+      <button class="btn btn-hint" id="btnHint" onclick="useHint()">💡</button>
+      <button class="btn btn-clear" onclick="clearSlots()">🔄</button>
+      <button class="btn btn-check" onclick="checkWord()">✅</button>
+      <button class="btn btn-skip" onclick="skipRound()">⏭️</button>
+    </div>
+  </div>
+
+  <!-- MATH CARD -->
+  <div class="game-card" id="mathCard" style="display: none;">
+    <div class="round-counter" id="mathCounter">Round 2 of 22 (Math)</div>
+    
+    <div class="math-equation" id="mathEquation">3 × 4 = ?</div>
+    <div class="math-options" id="mathOptions">
+       <!-- Buttons injected by JS -->
+    </div>
+
+    <div class="streak-display" id="mathStreakDisplay"></div>
+    <div class="feedback" id="mathFeedback"></div>
+
+    <div class="btn-container">
+      <button class="btn btn-skip" onclick="skipRound()">⏭️ Skip</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Victory Overlay -->
+<div class="victory-overlay" id="victoryOverlay">
+  <div class="victory-content">
+    <span class="koala-hug">🐨🌿</span>
+    <div class="hug-text">AMAZING!</div>
+    <p style="font-size: 1.1em; color: #7f8c8d; margin-bottom: 15px;">
+      You spelled the words AND did the math! Koali is SO proud!
+    </p>
+    <div style="color: #f39c12; font-family: 'Fredoka One', cursive; font-size: 1.5em; margin-bottom: 15px;">
+      Score: <span id="finalScore">0</span> ⭐
+    </div>
+    <button class="btn btn-play" onclick="restartGame()">🎮 Play Again!</button>
+  </div>
+</div>
+
+<script>
+// Words
+const WORDS = [
+  { word: "play", emoji: "🎮", hint: "Having fun with games or toys" },
+  { word: "well", emoji: "👍", hint: "Doing something in a good way" },
+  { word: "just", emoji: "⚖️", hint: "Only, or fair and right" },
+  { word: "saw", emoji: "👀", hint: "Used your eyes in the past" },
+  { word: "rude", emoji: "😠", hint: "Not being polite" },
+  { word: "prune", emoji: "🫐", hint: "A dried plum" },
+  { word: "flute", emoji: "🪈", hint: "A musical instrument you blow into" },
+  { word: "grew", emoji: "🌱", hint: "Got bigger in the past" },
+  { word: "chew", emoji: "🦷", hint: "Biting food before swallowing" },
+  { word: "boot", emoji: "👢", hint: "A tall shoe for rain or snow" },
+  { word: "zoom", emoji: "🏎️", hint: "To move really, really fast!" }
+];
+
+const TOTAL_ROUNDS = WORDS.length * 2;
+let currentRoundCount = 0; 
+let currentSpellingIndex = 0;
+
+let score = 0;
+let streak = 0;
+let hintsLeft = 3;
+
+// Game State
+let currentMathAnswer = 0;
+let slotContents = [];
+let shuffledLetters = [];
+let draggedLetter = null;
+let draggedLetterIndex = null;
+let touchDragElement = null;
+let touchSourceIndex = null;
+
+function createLeaves() {
+  const container = document.getElementById('leaves');
+  const leafTypes = ['🍃', '🌿', '🍂', '🌱'];
+  for (let i = 0; i < 20; i++) {
+    const leaf = document.createElement('div');
+    leaf.className = 'leaf';
+    leaf.textContent = leafTypes[Math.floor(Math.random() * leafTypes.length)];
+    leaf.style.left = Math.random() * 100 + '%';
+    leaf.style.top = Math.random() * 100 + '%';
+    leaf.style.animationDuration = (Math.random() * 10 + 10) + 's';
+    leaf.style.animationDelay = (Math.random() * 5) + 's';
+    leaf.style.fontSize = (Math.random() * 20 + 20) + 'px';
+    container.appendChild(leaf);
+  }
+}
+
+function koaliCheer() {
+  const mascot = document.getElementById('mascot');
+  mascot.classList.remove('cheer');
+  void mascot.offsetWidth; 
+  mascot.classList.add('cheer');
+}
+
+function loadChallenge() {
+  if (currentRoundCount >= TOTAL_ROUNDS) {
+    showVictory();
+    return;
+  }
+  updateProgress();
+  if (currentRoundCount % 2 === 0) {
+    document.getElementById('spellingCard').style.display = 'flex';
+    document.getElementById('mathCard').style.display = 'none';
+    loadSpellingRound();
+  } else {
+    document.getElementById('spellingCard').style.display = 'none';
+    document.getElementById('mathCard').style.display = 'flex';
+    loadMathRound();
+  }
+}
+
+function nextRound() {
+  currentRoundCount++;
+  setTimeout(loadChallenge, 1500);
+}
+
+function skipRound() {
+  streak = 0;
+  updateStreakUI();
+  playSound('pop');
+  if (currentRoundCount % 2 === 0) {
+      currentSpellingIndex = (currentSpellingIndex + 1) % WORDS.length;
+  }
+  currentRoundCount++;
+  loadChallenge();
+}
+
+function updateProgress() {
+  const pct = (currentRoundCount / TOTAL_ROUNDS) * 100;
+  const bar = document.getElementById('progressBar');
+  bar.style.width = pct + '%';
+  bar.textContent = `${currentRoundCount} / ${TOTAL_ROUNDS}`;
+  document.getElementById('score').textContent = score;
+  updateStreakUI();
+}
+
+function updateStreakUI() {
+  document.getElementById('streak').textContent = streak;
+  const streakEmoji = '🌿';
+  const flames = streak >= 2 ? streakEmoji.repeat(Math.min(streak, 5)) : '';
+  document.getElementById('spellingStreakDisplay').textContent = flames;
+  document.getElementById('mathStreakDisplay').textContent = flames;
+}
+
+// MATH
+function loadMathRound() {
+  document.getElementById('mathCounter').textContent = `Round ${currentRoundCount + 1} of ${TOTAL_ROUNDS} (Math)`;
+  document.getElementById('mathFeedback').textContent = '';
+  document.getElementById('mathFeedback').className = 'feedback';
+  
+  // Update to only 4 and 9 times tables
+  const base = Math.random() > 0.5 ? 4 : 9;
+  const multiplier = Math.floor(Math.random() * 12) + 1;
+  currentMathAnswer = base * multiplier;
+
+  document.getElementById('mathEquation').textContent = `${base} × ${multiplier} = ?`;
+
+  let options = [currentMathAnswer];
+  while(options.length < 4) {
+    let wrongAnswer;
+    const errorType = Math.floor(Math.random() * 3);
+    if (errorType === 0) wrongAnswer = currentMathAnswer + base;
+    else if (errorType === 1) wrongAnswer = Math.max(0, currentMathAnswer - base);
+    else wrongAnswer = currentMathAnswer + (Math.random() > 0.5 ? 2 : -2);
+
+    if (!options.includes(wrongAnswer) && wrongAnswer >= 0) {
+      options.push(wrongAnswer);
+    }
+  }
+  options = shuffleArray(options);
+
+  const optionsContainer = document.getElementById('mathOptions');
+  optionsContainer.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'btn math-btn';
+    btn.textContent = opt;
+    btn.onclick = () => checkMathAnswer(opt, btn);
+    optionsContainer.appendChild(btn);
+  });
+  
+  const card = document.getElementById('mathCard');
+  card.style.animation = 'none';
+  card.offsetHeight; 
+  card.style.animation = 'slideIn 0.5s ease';
+}
+
+function checkMathAnswer(selectedAnswer, btnElement) {
+  document.querySelectorAll('.math-btn').forEach(b => b.disabled = true);
+  if (selectedAnswer === currentMathAnswer) {
+    btnElement.classList.add('correct');
+    streak++;
+    const bonus = Math.max(0, (streak - 1) * 5);
+    const points = 10 + bonus;
+    score += points;
+    document.getElementById('mathFeedback').textContent = `🎉 Correct! +${points}`;
+    document.getElementById('mathFeedback').className = 'feedback correct';
+    playSound('correct');
+    koaliCheer();
+    createSparkles(document.getElementById('mathCard'));
+    nextRound();
+  } else {
+    btnElement.classList.add('incorrect');
+    streak = 0;
+    document.getElementById('mathFeedback').textContent = "❌ Oops!";
+    document.getElementById('mathFeedback').className = 'feedback incorrect';
+    playSound('wrong');
+    document.querySelectorAll('.math-btn').forEach(b => {
+      if(parseInt(b.textContent) === currentMathAnswer) b.classList.add('correct');
+    });
+    nextRound();
+  }
+  updateProgress();
+}
+
+// SPELLING
+function loadSpellingRound() {
+  const wordData = WORDS[currentSpellingIndex % WORDS.length];
+  const word = wordData.word.toLowerCase();
+  document.getElementById('spellingCounter').textContent = `Round ${currentRoundCount + 1} of ${TOTAL_ROUNDS} (Spelling)`;
+  document.getElementById('wordImage').textContent = wordData.emoji;
+  document.getElementById('wordHint').textContent = wordData.hint;
+  document.getElementById('spellingFeedback').textContent = '';
+  document.getElementById('spellingFeedback').className = 'feedback';
+
+  const slotsContainer = document.getElementById('slotsContainer');
+  slotsContainer.innerHTML = '';
+  slotContents = new Array(word.length).fill(null);
+
+  for (let i = 0; i < word.length; i++) {
+    const slot = document.createElement('div');
+    slot.className = 'letter-slot';
+    slot.dataset.index = i;
+    slot.addEventListener('dragover', handleDragOver);
+    slot.addEventListener('dragenter', handleDragEnter);
+    slot.addEventListener('dragleave', handleDragLeave);
+    slot.addEventListener('drop', handleDrop);
+    slot.addEventListener('click', () => removeFromSlot(i));
+    slot.addEventListener('touchend', handleSlotTouchEnd);
+    slotsContainer.appendChild(slot);
+  }
+
+  const extras = generateExtraLetters(word);
+  const allLetters = word.split('').concat(extras);
+  shuffledLetters = shuffleArray(allLetters);
+  renderLetterPool();
+
+  const card = document.getElementById('spellingCard');
+  card.style.animation = 'none';
+  card.offsetHeight; 
+  card.style.animation = 'slideIn 0.5s ease';
+}
+
+function checkWord() {
+  const targetWord = WORDS[currentSpellingIndex % WORDS.length].word.toLowerCase();
+  const slots = document.querySelectorAll('.letter-slot');
+  let userWord = "";
+  let isComplete = true;
+  
+  slotContents.forEach(idx => {
+    if (idx === null) isComplete = false;
+    else userWord += shuffledLetters[idx];
+  });
+
+  if (!isComplete) {
+    document.getElementById('spellingFeedback').textContent = "🤔 Fill in all letters!";
+    document.getElementById('spellingFeedback').className = 'feedback incorrect';
+    return;
+  }
+
+  if (userWord.toLowerCase() === targetWord) {
+    streak++;
+    const bonus = Math.max(0, (streak - 1) * 5);
+    const points = 10 + bonus;
+    score += points;
+    slots.forEach((slot, i) => setTimeout(() => slot.classList.add('correct'), i * 100));
+    document.getElementById('spellingFeedback').textContent = `🎉 Correct! +${points}`;
+    document.getElementById('spellingFeedback').className = 'feedback correct';
+    playSound('correct');
+    koaliCheer();
+    createSparkles(document.getElementById('spellingCard'));
+    updateProgress();
+    currentSpellingIndex++;
+    nextRound();
+  } else {
+    streak = 0;
+    updateProgress();
+    slots.forEach((slot, i) => {
+      const letterIdx = slotContents[i];
+      if (letterIdx !== null) {
+        if (shuffledLetters[letterIdx].toLowerCase() === targetWord[i]) slot.classList.add('correct');
+        else slot.classList.add('incorrect');
+      }
+    });
+    document.getElementById('spellingFeedback').textContent = "❌ Oops!";
+    document.getElementById('spellingFeedback').className = 'feedback incorrect';
+    playSound('wrong');
+    setTimeout(() => { slots.forEach(slot => slot.classList.remove('incorrect')); }, 1200);
+  }
+}
+
+function shuffleArray(arr) {
+  const shuffled = [...arr];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+function generateExtraLetters(word) {
+  const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+  const extras = [];
+  const numExtras = Math.max(2, Math.floor(word.length / 2));
+  const wordLetters = new Set(word.toLowerCase().split(''));
+  while (extras.length < numExtras) {
+    const randomLetter = alphabet[Math.floor(Math.random() * 26)];
+    if (!wordLetters.has(randomLetter) || Math.random() > 0.8) extras.push(randomLetter);
+  }
+  return extras;
+}
+
+function renderLetterPool() {
+  const pool = document.getElementById('lettersPool');
+  pool.innerHTML = '';
+  shuffledLetters.forEach((letter, index) => {
+    const el = document.createElement('div');
+    el.className = 'draggable-letter';
+    el.textContent = letter.toUpperCase();
+    el.draggable = true;
+    el.dataset.index = index;
+    el.dataset.letter = letter;
+    if (slotContents.includes(index)) el.classList.add('used');
+    
+    el.addEventListener('dragstart', handleDragStart);
+    el.addEventListener('dragend', handleDragEnd);
+    el.addEventListener('touchstart', handleTouchStart, { passive: false });
+    el.addEventListener('touchmove', handleTouchMove, { passive: false });
+    el.addEventListener('touchend', handleTouchEnd);
+    pool.appendChild(el);
+  });
+}
+
+function handleDragStart(e) {
+  draggedLetter = e.target.dataset.letter;
+  draggedLetterIndex = parseInt(e.target.dataset.index);
+  e.target.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  playSound('pop');
+}
+function handleDragEnd(e) {
+  e.target.classList.remove('dragging');
+  document.querySelectorAll('.letter-slot').forEach(s => s.classList.remove('drag-over'));
+}
+function handleDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
+function handleDragEnter(e) { e.preventDefault(); e.target.closest('.letter-slot')?.classList.add('drag-over'); }
+function handleDragLeave(e) { e.target.closest('.letter-slot')?.classList.remove('drag-over'); }
+function handleDrop(e) {
+  e.preventDefault();
+  const slot = e.target.closest('.letter-slot');
+  if (!slot) return;
+  slot.classList.remove('drag-over');
+  const slotIndex = parseInt(slot.dataset.index);
+  slotContents[slotIndex] = draggedLetterIndex;
+  slot.textContent = draggedLetter.toUpperCase();
+  slot.classList.add('filled');
+  slot.classList.remove('correct', 'incorrect'); 
+  renderLetterPool();
+  playSound('place');
+}
+
+function handleTouchStart(e) {
+  // e.preventDefault(); // allow page scroll if not dragging a letter
+  const target = e.target.closest('.draggable-letter');
+  if (!target || target.classList.contains('used')) return;
+  e.preventDefault(); // Only prevent scroll if we actually grab a letter
+  touchSourceIndex = parseInt(target.dataset.index);
+  touchDragElement = target.cloneNode(true);
+  touchDragElement.className = 'draggable-letter touch-letter';
+  document.body.appendChild(touchDragElement);
+  moveTouchElement(e.touches[0]);
+  target.classList.add('dragging');
+  playSound('pop');
+}
+function handleTouchMove(e) {
+  if (!touchDragElement) return;
+  e.preventDefault(); // Stop scrolling while dragging
+  const touch = e.touches[0];
+  moveTouchElement(touch);
+  const target = document.elementFromPoint(touch.clientX, touch.clientY);
+  const slot = target?.closest('.letter-slot');
+  document.querySelectorAll('.letter-slot').forEach(s => s.classList.remove('drag-over'));
+  if (slot) slot.classList.add('drag-over');
+}
+function handleTouchEnd(e) {
+  if (!touchDragElement) return;
+  const touch = e.changedTouches[0];
+  const target = document.elementFromPoint(touch.clientX, touch.clientY);
+  const slot = target?.closest('.letter-slot');
+  if (slot) {
+    const slotIndex = parseInt(slot.dataset.index);
+    slotContents[slotIndex] = touchSourceIndex;
+    slot.textContent = shuffledLetters[touchSourceIndex].toUpperCase();
+    slot.classList.add('filled');
+    slot.classList.remove('correct', 'incorrect');
+    renderLetterPool();
+    playSound('place');
+  }
+  document.body.removeChild(touchDragElement);
+  touchDragElement = null;
+  touchSourceIndex = null;
+  document.querySelectorAll('.draggable-letter').forEach(l => l.classList.remove('dragging'));
+  document.querySelectorAll('.letter-slot').forEach(s => s.classList.remove('drag-over'));
+}
+function moveTouchElement(touch) {
+  // Center touch under finger roughly
+  touchDragElement.style.left = (touch.clientX - 20) + 'px';
+  touchDragElement.style.top = (touch.clientY - 25) + 'px';
+}
+function handleSlotTouchEnd(e) {
+  const slot = e.target.closest('.letter-slot');
+  if (slot) removeFromSlot(parseInt(slot.dataset.index));
+}
+function removeFromSlot(slotIndex) {
+  if (slotContents[slotIndex] !== null) {
+    slotContents[slotIndex] = null;
+    const slot = document.querySelectorAll('.letter-slot')[slotIndex];
+    slot.textContent = '';
+    slot.classList.remove('filled', 'correct', 'incorrect');
+    renderLetterPool();
+    playSound('pop');
+  }
+}
+function clearSlots() {
+  slotContents.fill(null);
+  document.querySelectorAll('.letter-slot').forEach(slot => {
+    slot.textContent = '';
+    slot.classList.remove('filled', 'correct', 'incorrect');
+  });
+  renderLetterPool();
+  document.getElementById('spellingFeedback').textContent = '';
+  playSound('pop');
+}
+function useHint() {
+  if (hintsLeft <= 0) {
+    document.getElementById('spellingFeedback').textContent = "No hints left!";
+    document.getElementById('spellingFeedback').className = 'feedback incorrect';
+    return;
+  }
+  const word = WORDS[currentSpellingIndex % WORDS.length].word.toLowerCase();
+  const slots = document.querySelectorAll('.letter-slot');
+  for (let i = 0; i < word.length; i++) {
+    const currentSlotContent = slotContents[i];
+    const currentLetter = currentSlotContent !== null ? shuffledLetters[currentSlotContent].toLowerCase() : null;
+    if (currentLetter !== word[i]) {
+      let poolIndexToUse = shuffledLetters.findIndex((l, idx) => l.toLowerCase() === word[i] && !slotContents.includes(idx));
+      if (poolIndexToUse !== -1) {
+        slotContents[i] = poolIndexToUse;
+        slots[i].textContent = word[i].toUpperCase();
+        slots[i].classList.add('filled', 'correct');
+        renderLetterPool();
+        hintsLeft--;
+        document.getElementById('hints').textContent = hintsLeft;
+        document.getElementById('spellingFeedback').textContent = `Hint used!`;
+        document.getElementById('spellingFeedback').className = 'feedback correct';
+        playSound('hint');
+        return;
+      }
+    }
+  }
+}
+
+function showVictory() {
+  document.getElementById('finalScore').textContent = score;
+  document.getElementById('victoryOverlay').classList.add('show');
+  createConfetti();
+  playSound('victory');
+}
+
+function createConfetti() {
+  const colors = ['#f1c40f', '#e67e22', '#2ecc71', '#3498db', '#9b59b6'];
+  for (let i = 0; i < 60; i++) {
+    setTimeout(() => {
+      const conf = document.createElement('div');
+      conf.className = 'confetti';
+      conf.style.left = Math.random() * 100 + 'vw';
+      conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      conf.style.width = (Math.random() * 10 + 5) + 'px';
+      conf.style.height = (Math.random() * 10 + 5) + 'px';
+      conf.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      document.body.appendChild(conf);
+    }, i * 30);
+  }
+}
+
+function createSparkles(container) {
+  for (let i = 0; i < 10; i++) {
+    const s = document.createElement('div');
+    s.textContent = '✨';
+    s.style.position = 'absolute';
+    s.style.left = (Math.random() * 80 + 10) + '%';
+    s.style.top = (Math.random() * 80 + 10) + '%';
+    s.style.fontSize = '24px';
+    s.style.transition = 'all 1s ease';
+    s.style.pointerEvents = 'none';
+    container.appendChild(s);
+    setTimeout(() => { s.style.transform = `translateY(-50px) scale(0)`; s.style.opacity = 0; }, 50);
+    setTimeout(() => s.remove(), 1000);
+  }
+}
+
+function restartGame() {
+  currentRoundCount = 0;
+  currentSpellingIndex = 0;
+  score = 0;
+  streak = 0;
+  hintsLeft = 3;
+  document.getElementById('hints').textContent = 3;
+  document.getElementById('victoryOverlay').classList.remove('show');
+  loadChallenge();
+}
+
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioCtx = new AudioContext();
+
+function playSound(type) {
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  const now = audioCtx.currentTime;
+  
+  if (type === 'pop') {
+    osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(600, now + 0.1);
+    gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+    osc.start(now); osc.stop(now + 0.1);
+  } else if (type === 'place') {
+    osc.frequency.setValueAtTime(300, now);
+    gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+    osc.start(now); osc.stop(now + 0.1);
+  } else if (type === 'correct') {
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(523.25, now); osc.frequency.setValueAtTime(659.25, now + 0.1); osc.frequency.setValueAtTime(783.99, now + 0.2);
+    gain.gain.setValueAtTime(0.1, now); gain.gain.linearRampToValueAtTime(0, now + 0.4);
+    osc.start(now); osc.stop(now + 0.4);
+  } else if (type === 'wrong') {
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(200, now); osc.frequency.linearRampToValueAtTime(150, now + 0.3);
+    gain.gain.setValueAtTime(0.1, now); gain.gain.linearRampToValueAtTime(0, now + 0.3);
+    osc.start(now); osc.stop(now + 0.3);
+  } else if (type === 'victory') {
+    [523, 659, 784, 1046].forEach((freq, i) => {
+      const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+      o.connect(g); g.connect(audioCtx.destination);
+      o.frequency.value = freq;
+      g.gain.setValueAtTime(0.05, now + i*0.1); g.gain.exponentialRampToValueAtTime(0.001, now + i*0.1 + 0.4);
+      o.start(now + i*0.1); o.stop(now + i*0.1 + 0.4);
+    });
+  }
+}
+
+createLeaves();
+loadChallenge();
+</script>
+</body>
+</html>
