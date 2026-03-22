@@ -1,0 +1,33 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(householdId) {
+      return isSignedIn()
+        && get(/databases/$(database)/documents/households/$(householdId)).data.ownerUid == request.auth.uid;
+    }
+
+    match /users/{userId} {
+      allow read, create, update: if isSignedIn() && request.auth.uid == userId;
+      allow delete: if false;
+    }
+
+    match /households/{householdId} {
+      allow create: if isSignedIn() && request.resource.data.ownerUid == request.auth.uid;
+      allow read, update: if isOwner(householdId);
+      allow delete: if false;
+
+      match /children/{childId} {
+        allow read, write: if isOwner(householdId);
+
+        match /words/{wordId} {
+          allow read, write: if isOwner(householdId);
+        }
+      }
+    }
+  }
+}
